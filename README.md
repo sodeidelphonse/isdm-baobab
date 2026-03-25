@@ -18,7 +18,7 @@ The analysis is conducted across the three climatic zones of Benin (West Africa)
 install.packages("remotes") 
 remotes::install_github("sodeidelphonse/isdmtools@v0.4.0")
 ```
-* The proposed reproducible workflow require the package (INLA)[https://www.r-inla.org/download-install] version `v24.06.27` 
+* The proposed reproducible workflow require the package [`INLA`](https://www.r-inla.org/download-install) version `v24.06.27` 
 before expecting reproduce the outputs presented in the paper.
 * Though some scripts can work independently, they may require at list the pre-processing step.
 

@@ -130,7 +130,7 @@ res_df <- compile_results ("results") |>
   dplyr::slice(1:50)
 
 # summary
-summary_df <- res_old |>
+summary_df <- res_df |>
   group_by(Model) |>
   summarise(
     across(
