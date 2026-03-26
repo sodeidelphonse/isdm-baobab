@@ -27,7 +27,7 @@ before expecting reproduce the outputs presented in the paper.
     * `Adansonia_occurrence.csv`: Presence-only records (point pattern data).
     * `Adansonia_abundance.csv`: Village-level count data (point-referenced data).
     * `covariates/`: 5 clipped GeoTIFFs (Final predictors retained after selection).
-    * `shapefile/`: The polygon map used as the study region.
+    * `shapefile/`: The polygon map used as the study region and the lines delineating the three climatic zones.
 * **/scripts**:
     * `01_preprocessing.R`: Importing and cleaning datasets and generating mesh settings.
     * `02_EDA.R`: Perform exploratory analysis, hypothesis testing and data visualisation.
