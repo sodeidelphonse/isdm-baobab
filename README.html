@@ -360,22 +360,22 @@ analyses presented in the manuscript: <em>“Integrating Presence-only and
 Abundance Data to Predict Baobab (<em>Adansonia digitata</em> L.)
 Distribution: A Bayesian Data Fusion Framework”</em>.</p>
 <div id="overview" class="section level2">
-<h2>1. Overview</h2>
-<p>This study utilises a spatial fusion framework via
+<h2>1. Overview 📝</h2>
+<p>This study utilises a spatial fusion framework with
 <code>inlabru</code> (via <code>PointedSDMs</code>) and
 <code>isdmtools</code> to integrate presence-only (e.g., GBIF) and
 structured abundance data. The analysis is conducted across the three
 climatic zones of Benin (West Africa).</p>
 </div>
 <div id="requirements" class="section level2">
-<h2>2. Requirements</h2>
+<h2>2. Requirements 🛠️</h2>
 <ul>
 <li><strong>Language:</strong> R (v4.4.1)</li>
 <li><strong>Key Packages:</strong> <code>isdmtools</code>,
 <code>inlabru</code>, <code>INLA</code>, <code>PointedSDMs</code>,
 <code>sf</code>, <code>pROC</code>, and <code>blockCV</code>. See the
-scripts.</li>
-<li><strong>Environment:</strong> An <code>renv.lock</code> file is
+scripts for other required packages.</li>
+<li><strong>Environment:</strong> <code>renv.lock</code> file is
 provided to restore the exact library versions used in this
 analysis.</li>
 <li>The package <code>isdmtools</code> which is not yet available on
@@ -384,15 +384,15 @@ CRAN can be installed as follows:</li>
 <pre class="r"><code>install.packages(&quot;remotes&quot;) 
 remotes::install_github(&quot;sodeidelphonse/isdmtools@v0.4.0&quot;)</code></pre>
 <ul>
-<li>The proposed reproducible workflow require the package (INLA)[<a href="https://www.r-inla.org/download-install" class="uri">https://www.r-inla.org/download-install</a>] version
+<li>The proposed reproducible workflow require the package <a href="https://www.r-inla.org/download-install"><code>INLA</code></a>
 <code>v24.06.27</code> before expecting reproduce the outputs presented
 in the paper.</li>
-<li>Though some scripts can work independently, they may require at list
-the pre-processing step.</li>
+<li>Although some scripts can work independently, they may require at
+least the pre-processing step.</li>
 </ul>
 </div>
 <div id="repository-structure" class="section level2">
-<h2>3. Repository Structure</h2>
+<h2>3. Repository Structure 📂</h2>
 <ul>
 <li><strong>/data</strong>:
 <ul>
@@ -400,49 +400,59 @@ the pre-processing step.</li>
 pattern data).</li>
 <li><code>Adansonia_abundance.csv</code>: Village-level count data
 (point-referenced data).</li>
-<li><code>covariates/</code>: 5 clipped GeoTIFFs (Final predictors
+<li><code>covariates/</code>: Five clipped GeoTIFFs (Final predictors
 retained after selection).</li>
-<li><code>shapefile/</code>: The polygon map used as the study
-region.</li>
+<li><code>shapefile/</code>: The polygon map used as the study region
+and the vector lines delineating the three climatic zones.</li>
+<li><code>covariates_pc.rds</code>(covariates stack): The five final
+environmental variables used in the model in a serialised format.</li>
+<li><code>pred_points.rds</code>(prediction grids): The regular grid
+points locations generated for the model prediction in a serialised
+format.</li>
 </ul></li>
 <li><strong>/scripts</strong>:
 <ul>
-<li><code>01_preprocessing.R</code>: Importing and cleaning datasets and
-generating mesh settings.</li>
-<li><code>02_EDA.R</code>: Perform exploratory analysis, hypothesis
-testing and data visualisation.</li>
+<li><code>01_preprocessing.R</code>: Import and clean datasets and
+generate the mesh configurations.</li>
+<li><code>02_EDA.R</code>: Perform exploratory analysis, particularly
+hypothesis testing and data visualisation.</li>
 <li><code>03_evaluation_pipeline.R</code>: Generate the ISDM pipeline
 from spatial blocking, fitting, prediction to evaluation.</li>
 <li><code>04_run_blockCV.R</code>: Run the block cross-validation
-process for the integrated modeling workflow.</li>
+strategy for the integrated modeling workflow.</li>
 <li><code>05_model_fitting.R</code>: INLA-SPDE integrated modeling
-workflow for the selected model.</li>
+workflow for the selected model using the original datasets.</li>
 <li><code>06_prediction.R</code>: Make prediction from the fitted model
-and compute relevant target quantities</li>
-<li><code>07_predictive_check.R</code>: Posterior predictive check from
-the integrated modelling workflow.</li>
+and compute relevant target quantities.</li>
+<li><code>07_predictive_check.R</code>: Perform posterior predictive
+check (PPC) from the integrated models.</li>
+<li><code>07_predictive_check.R</code>: Utility functions used in other
+scripts.</li>
 </ul></li>
 <li><strong>/figures</strong>: The figures generated from the
 analysis.</li>
 <li><strong>/results</strong>: Contains the pre-computed covariance
 parameters for <code>LGCP</code> and <code>variofit</code> models (voir
 <code>02_EDA.R</code>)</li>
-<li><strong>/software</strong>: The archived version of
-<code>isdmtools</code> package used for preparing the manuscript.</li>
-<li><code>README.md</code>: Project documentation.</li>
-<li><code>renv.lock</code>: An environment file provided to restore the
-exact library versions used in this analysis.</li>
+<li><strong>/software</strong>: The archive of <code>isdmtools</code>
+package used for preparing the manuscript.</li>
+<li><code>README.md</code>: The project documentation.</li>
+<li><code>renv.lock</code>: A virtual environment file provided to
+restore the exact library versions used in this analysis.</li>
 </ul>
 </div>
-<div id="data-notes" class="section level2">
-<h2>4. Data Notes</h2>
+<div id="reproducing-the-virtual-environment" class="section level2">
+<h2>4. Reproducing the virtual environment 📦</h2>
 <ul>
-<li><strong>Covariates (covariates_pc.rds):</strong> We provide the five
-final environmental variables used in the model (clipped to the study
-area) as a serialised format.</li>
-<li><strong>Prediction grids (pred_points.rds):</strong> They are
-regular grid points locations generated for the model prediction.</li>
+<li>Make sure you have the <code>renv</code> package installed:</li>
 </ul>
+<pre class="r"><code>install.packages(&quot;renv&quot;)</code></pre>
+<ul>
+<li>With the project directory as your working directory, use
+<code>renv</code> to install all packages listed in the
+<code>renv.lock</code> file:</li>
+</ul>
+<pre class="r"><code>renv::restore()</code></pre>
 </div>
 <div id="exploratory-data-analysis-eda" class="section level2">
 <h2>5. Exploratory Data Analysis (EDA) 📊</h2>
@@ -455,10 +465,10 @@ uncertainty of covariance parameters (estimated via <code>kppm</code>
 and <code>variofit</code>), 1,000 parametric bootstrap replicates are
 generated.</p></li>
 <li><p><strong>Fast-Track</strong>: To save time, pre-calculated
-replicates are provided in:</p>
+replicates for these parameters are provided in:</p>
 <ul>
-<li><code>outputs/simulations_lgcp.csv</code></li>
-<li><code>outputs/simulations_variofit.csv</code></li>
+<li><code>results/simulations_lgcp.csv</code></li>
+<li><code>results/simulations_variofit.csv</code></li>
 </ul></li>
 <li><p><strong>Purpose</strong>: These replicates establish the baseline
 spatial range used to inform the SPDE priors in the integrated
@@ -466,13 +476,13 @@ models.</p></li>
 </ul>
 </div>
 <div id="contact" class="section level2">
-<h2>6. Contact</h2>
-<p>For questions regarding the <code>isdmtools</code> implementation or
-data processing, please contact the corresponding author or open an
-issue on the package repository.</p>
+<h2>6. Contact 📧</h2>
+<p>For questions regarding the <a href="https://sodeidelphonse.github.io/isdmtools/"><code>isdmtools</code></a>
+implementation or data processing, please contact the corresponding
+author or open an issue on the package <a href="https://github.com/sodeidelphonse/isdmtools/issues">repository</a>.</p>
 </div>
 <div id="license" class="section level2">
-<h2>7. License</h2>
+<h2>7. License ⚖️</h2>
 <p>This repository is released under the <a href="LICENSE">MIT
 License</a>.</p>
 </div>
