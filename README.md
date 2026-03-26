@@ -39,7 +39,7 @@ before expecting reproduce the outputs presented in the paper.
     * `05_model_fitting.R`: INLA-SPDE integrated modeling workflow for the selected model using the original datasets.
     * `06_prediction.R`: Make prediction from the fitted model and compute relevant target quantities.
     * `07_predictive_check.R`: Perform posterior predictive check (PPC) from the integrated models.
-    * `07_predictive_check.R`: Utility functions used in other scripts.
+    * `08_utils.R`: Utility functions used in other scripts.
 * **/figures**: The figures generated from the analysis.
 * **/results**: Contains the pre-computed covariance parameters for `LGCP` and `variofit` models (see `02_EDA.R`)
 * **/software**: The archive of `isdmtools` package used for preparing the manuscript.
