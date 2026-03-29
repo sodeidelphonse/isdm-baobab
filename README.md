@@ -65,11 +65,11 @@ This analysis is designed as a sequential pipeline (01–08). Each stage relies 
     
     * Integrated Model Selection (Stage 04): Utilizes processed data from 01 and the evaluation pipeline automatically sourced from 03.
     
-    * Modelling (Stage 05): Requires the environmental covariate stacks and mesh objects prepared in 01.
+    * Modelling (Stage 05): Requires the environmental covariate stacks, datasets and mesh objects prepared in 01.
 
     * Prediction (Stage 06): Requires the fitted model objects from 05 and the prediction locations to be imported.
     
-    * Validation(Stage 07): Utilizes processed data from 01 to rerun models with `inlabru` and `isdmtools` and perform residual diagnostics.
+    * Validation(Stage 07): Utilizes processed data from 01 to rerun models with `inlabru` and perform residual diagnostics.
 
     * Utility Functions: The script `08-utils.R` is sourced in most scripts as it provides some back-end functions for the analysis.
     
@@ -93,6 +93,7 @@ ensure that object names are mapped according to the naming conventions establis
 - **Fast-Track**: To save time, pre-calculated replicates for these parameters are provided in:
   - `results/simulations_lgcp.csv`
   - `results/simulations_variofit.csv`
+  
 - **Purpose**: These estimates establish the baseline spatial range used to inform the SPDE priors in the integrated models.
 
 ## 📧 Contact

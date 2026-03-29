@@ -3029,7 +3029,7 @@
     "isdmtools": {
       "Package": "isdmtools",
       "Version": "0.4.0",
-      "Source": "Local",
+      "Source": "GitHub",
       "Type": "Package",
       "Title": "Toolkit for Evaluating and Analysing Integrated Species Distribution Models in R",
       "Authors@R": "c(person(given = \"Akoeugnigan Idelphonse\", family = \"SODE\", email = \"sdidelphonse@gmail.com\", role = c(\"aut\", \"cre\"),  comment = c(ORCID = \"0000-0002-8556-239X\", \"SODE A. Idelphonse - continued development of the main code\")), person(given = \"Adandé Belarmain\", family = \"Fandohan\", role = \"ctb\"), person(given = \"Elias Teixeira\", family = \"Krainski\", role = \"ctb\"),       person(given = \"Romain\", family = \"Glèlè Kakaï\", role = \"ctb\"))",
@@ -3068,9 +3068,14 @@
       ],
       "Config/testthat/edition": "3",
       "VignetteBuilder": "knitr",
-      "Author": "Akoeugnigan Idelphonse SODE [aut, cre] (<https://orcid.org/0000-0002-8556-239X>, SODE A. Idelphonse - continued development of the main code), Adandé Belarmain Fandohan [ctb], Elias Teixeira Krainski [ctb], Romain Glèlè Kakaï [ctb]",
-      "RemoteType": "local",
-      "RemoteUrl": "D:/Research/Projects/Pack_dev/isdmtools_0.4.0.zip"
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "isdmtools",
+      "RemoteUsername": "sodeidelphonse",
+      "RemoteRef": "v0.4.0",
+      "RemoteSha": "de8418821d1b814a7950e120d2a37fa4fd5da245",
+      "NeedsCompilation": "no",
+      "Author": "Akoeugnigan Idelphonse SODE [aut, cre] (<https://orcid.org/0000-0002-8556-239X>, SODE A. Idelphonse - continued development of the main code), Adandé Belarmain Fandohan [ctb], Elias Teixeira Krainski [ctb], Romain Glèlè Kakaï [ctb]"
     },
     "isoband": {
       "Package": "isoband",
