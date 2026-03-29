@@ -4,7 +4,9 @@
 
 library(inlabru)
 library(DHARMa)
-source("scripts/08_utils.r")
+library(isdmtools)
+
+bru_options_set(control.compute = list(dic = TRUE, config = TRUE)) 
 
 #----------------------------------------------------------
 #--- Posterior predictive check for integrated models  
@@ -37,7 +39,7 @@ obs_pp <- bru_obs(
   samplers = ben_utm 
 )
 
-# a) Poisson likelihood 
+# Poisson likelihood 
 obs_pois <- bru_obs(
   formula = counts ~ bio1_wc30s + bio14_wc30s + srtm_slope + SLTPPT_d2 + CLYPPT_d6 + 
                       area + Count_inter + spde, 
@@ -45,21 +47,23 @@ obs_pois <- bru_obs(
   data = abund_utm
 )
 
+# Integrated model with Poisson likelihood 
 system.time(jfit_pois <- bru(jcmp1, obs_pois, obs_pp, 
                               options = list(control.inla = list(int.strategy = "eb"), 
                                              bru_max_iter = 20))
             )
 summary(jfit_pois) 
 
-# b) Negative binomial likelihood
+# Negative binomial (NB) likelihood 
 obs_nb <- bru_obs(
-  formula = counts ~ bio1_wc30s + bio14_wc30s +srtm_slope +SLTPPT_d2 +
-                    CLYPPT_d6 +Count_inter +area +spde, 
+  formula = counts ~ bio1_wc30s + bio14_wc30s +srtm_slope +SLTPPT_d2 + CLYPPT_d6 +
+                    Count_inter +area +spde, 
   family = "nbinomial", 
   control.family = list(variant = 1),
   data = abund_utm
 )
 
+# Integrated model with NB likelihood 
 system.time(jfit_nb <- bru(jcmp1, obs_nb, obs_pp, 
                             options = list(control.inla = list(int.strategy = "eb"),
                                            bru_max_iter = 20
@@ -67,19 +71,17 @@ system.time(jfit_nb <- bru(jcmp1, obs_nb, obs_pp,
             )
 summary(jfit_nb) 
 
-# Difference in DIC: Poisson family did a good job !
+# Difference in DIC: The Poisson family did a good job !
 jfit_pois$dic$dic - jfit_nb$dic$dic
 
 
-#----------------------------------
-#--- Bayesian predictive check
-#----------------------------------
+#--- Residuals analysis for the fitted models -----
 
-# Generate 1,000 posterior samples 
+# Generate 1,000 posterior samples for each count model
 set.seed(234)
 samples <- lapply(list(pois = jfit_pois, nb = jfit_nb),  
-                  function(x) {
-                    generate(x, newdata = abund_utm, 
+                  function(model) {
+                    generate(model, newdata = abund_utm, 
                              formula = ~ exp(Count_inter +spde +bio1_wc30s +bio14_wc30s +
                                             srtm_slope +SLTPPT_d2 +CLYPPT_d6)*abund_utm$area[1],
                              n.samples = 1000)
@@ -125,7 +127,7 @@ plotQQunif(res_dharm_nb)
 testDispersion(res_dharm_nb)
 dev.off()
 
-# No spatial autocorrelation present
+# Spatial autocorrelation remains in the residuals
 testSpatialAutocorrelation(res_dharm_nb, 
                            x = st_coordinates(abund_utm)[,"X"], 
                            y = st_coordinates(abund_utm)[,"Y"], 
