@@ -2,23 +2,29 @@
 
 # Reproducibility Package: Integrated Species Distribution Modeling of the African Baobab in Benin.
 
-This repository contains the data and code required to reproduce the analyses presented in the manuscript: *"Integrating Presence-only and Abundance Data to Predict Baobab (*Adansonia digitata* L.) Distribution: A Bayesian Data Fusion Framework"*. 
+This repository contains the data and code required to reproduce the analyses presented in the manuscript: *"Sode et al. Integrating Presence-only and Abundance Data to Predict Baobab (*Adansonia digitata* L.) Distribution: A Bayesian Data Fusion Framework"*. 
 
 ## 📝 Overview 
 The study utilises a Bayesian spatial fusion framework with `inlabru`, `PointedSDMs` and `isdmtools` to integrate presence-only (GBIF and field records) and structured abundance data of the African baobab. 
 The aim is to comprehend and map the spatial variation of this multipurpose agroforestry tree species across the three climatic zones of Benin (West Africa).
 
+## 🚀 Quick Start
+1. Open the `.Rproj` file.
+2. Run `renv::restore()`.
+3. Run `scripts/01-data-preparation.R`.
+4. Follow scripts 02–07 in order.
+
 ## 🛠 Requirements ️
 * **Language:** R (v4.4.1)
-* **Key Packages:** `isdmtools`, `inlabru`, `INLA`, `PointedSDMs`, `sf`, `pROC`, and `blockCV`. See the scripts for other required packages. 
+* **Key Packages:** `isdmtools`, `inlabru`, `PointedSDMs`, `sf`, `pROC`, and `blockCV`. See the scripts for other required packages. 
 * **Environment:** `renv.lock` file is provided to restore the exact library versions used in this analysis.
-* The package `isdmtools` which is not yet available on CRAN can be installed as follows:
+* **`isdmtools`:** which is not yet available on CRAN can be installed as follows:
 
 ```R
 install.packages("remotes") 
 remotes::install_github("sodeidelphonse/isdmtools@v0.4.0")
 ```
-* The proposed workflow requires the package [`INLA`](https://www.r-inla.org/download-install) `v24.06.27` 
+* **`INLA`:** The workflow requires the package [INLA](https://www.r-inla.org/download-install) `v24.06.27` 
 in order to reproduce the outputs presented in the paper.
 
 ## 📂 Repository Structure
@@ -31,7 +37,7 @@ in order to reproduce the outputs presented in the paper.
     * `pred_points.rds`: The regular grid points locations stored in a serialized format for the model prediction.
 
 * **/scripts**:
-    * `01_preprocessing.R`: Import and clean datasets and generate the mesh configurations.
+    * `01_preprocessing.R`: Import and clean datasets and generate mesh configurations.
     * `02_EDA.R`: Perform exploratory analysis, particularly spatial dependence assessment, hypothesis testing, and data visualization.
     * `03_evaluation_pipeline.R`: Set up the ISDM pipeline from spatial blocking, fitting, prediction to evaluation.
     * `04_run_blockCV.R`: Run the block cross-validation strategy for the integrated modeling workflow.
@@ -48,12 +54,12 @@ in order to reproduce the outputs presented in the paper.
 
 * `README.md`: The project documentation (this page).
 
-## 📦 Reproducing the virtual environment
+## 📦 Reproducing the environment
 To reproduce the environment used for the analysis:
 
 * Make sure you have the `renv` package installed by running `install.packages("renv")`. 
 
-* With the project directory as your working directory, run `renv::restore()` to automatically download and install all required library versions.
+* With the project root as your working directory, run `renv::restore()` to automatically download and install all required library versions.
 
 ## ⚙️ Pipeline Logic 
 This analysis is designed as a sequential pipeline (01–08). Each stage relies on the outputs of the preceding stages and the shared utility functions:
@@ -61,33 +67,35 @@ This analysis is designed as a sequential pipeline (01–08). Each stage relies 
 * **Sequential Flow**: To reproduce the full results, it is recommended to run the scripts in numerical order.
 
 * **Cross-Stage Dependencies**:
-    * Exploratory Data Analysis (Stage 02): Utilizes processed data from stage 01 to performs the initial variogram and spatial point pattern analyses as well as exploratory modeling on count data. 
+    * Exploratory Data Analysis (Stage 02): Utilizes processed data from stage 01 to performs the initial variogram and spatial point pattern analyses and data visualization. 
     
-    * Integrated Model Selection (Stage 04): Utilizes processed data from 01 and the evaluation pipeline automatically sourced from 03.
+    * Integrated Model Evaluation (Stage 04): Utilizes processed data from 01 and the evaluation pipeline sourced from 03.
     
-    * Modelling (Stage 05): Requires the environmental covariate stacks, datasets and mesh objects prepared in 01.
+    * Modeling (Stage 05): Requires the environmental covariates' stack, datasets and mesh objects prepared in 01.
 
     * Prediction (Stage 06): Requires the fitted model objects from 05 and the prediction locations to be imported.
     
     * Validation(Stage 07): Utilizes processed data from 01 to rerun models with `inlabru` and perform residual diagnostics.
 
-    * Utility Functions: The script `08-utils.R` is sourced in most scripts as it provides some back-end functions for the analysis.
+    * Utility Functions: The script `08-utils.R` is sourced in some scripts as it provides core back-end functions for the analysis.
     
 ## 💾 Spatial Data Notes
+
 Due to serialization constraints common with high-resolution rasters and complex spatial model outputs (e.g., `terra` and `INLA` objects), 
 we recommend the following approach for full reproducibility:
 
-* Re-running Pre-processing: It is highly recommended to run `01-data-preparation.R` from scratch, particularly when R session is re-started. 
+* Re-running Pre-processing: It is highly recommended to re-run `01-data-preparation.R`, particularly when R session is re-started. 
 This ensures that the environmental covariates are correctly loaded into your local R memory for subsequent stages.
 
 * Raw Data Access: The original environmental layers are provided in `data/covariates/` to demonstrate the transition from raw geospatial data to the analysis-ready stacks.
 
-* Serialized Alternative: For advanced users, pre-processed covariates are available as `covariates_pc.rds`. If using it, 
-ensure that object names are mapped according to the naming conventions established in the workflow scripts.
+* Serialized Alternative: Pre-processed covariates are available as `covariates_pc.rds`. If using it, ensure that object names are mapped according to the naming conventions established in all scripts.
 
-## 📊 Exploratory Data Analysis (EDA) 
+## 📊 Exploratory Data Analysis (EDA)/Results
 
-- **Parametric Bootstrapping**: To assess the uncertainty of covariance parameters (estimated via `kppm` and `variofit`), 
+The EDA (stage 02) produces two critical outputs, among others.
+
+- **Bootstrap Replicates**: To assess the uncertainty of covariance parameters (estimated via `kppm` and `variofit`), 
 1,000 parametric bootstrap replicates are generated.
 
 - **Fast-Track**: To save time, pre-calculated replicates for these parameters are provided in:
