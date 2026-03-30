@@ -5,18 +5,18 @@
 This repository contains the data and code required to reproduce the analyses presented in the manuscript: *"Sode et al. Integrating Presence-only and Abundance Data to Predict Baobab (*Adansonia digitata* L.) Distribution: A Bayesian Data Fusion Framework"*. 
 
 ## 📝 Overview 
-The study utilises a Bayesian spatial fusion framework with `inlabru`, `PointedSDMs` and `isdmtools` to integrate presence-only (GBIF and field records) and structured abundance data of the African baobab. 
+The study utilises a Bayesian spatial fusion framework with `inlabru` and `isdmtools` to integrate presence-only (GBIF and field records) and structured abundance data of the African baobab. 
 The aim is to comprehend and map the spatial variation of this multipurpose agroforestry tree species across the three climatic zones of Benin (West Africa).
 
 ## 🚀 Quick Start
 1. Open the `.Rproj` file.
 2. Run `renv::restore()`.
-3. Run `scripts/01-data-preparation.R`.
+3. Run `scripts/01_preprocessing.R`.
 4. Follow scripts 02–07 in order.
 
 ## 🛠 Requirements ️
 * **Language:** R (v4.4.1)
-* **Key Packages:** `isdmtools`, `inlabru`, `PointedSDMs`, `sf`, `pROC`, and `blockCV`. See the scripts for other required packages. 
+* **Key Packages:** `isdmtools`, `inlabru`, `PointedSDMs`, `INLA`, `sf`, `pROC`, and `blockCV`. See the scripts for other required packages. 
 * **Environment:** `renv.lock` file is provided to restore the exact library versions used in this analysis.
 * **`isdmtools`:** which is not yet available on CRAN can be installed as follows:
 
@@ -84,7 +84,7 @@ This analysis is designed as a sequential pipeline (01–08). Each stage relies 
 Due to serialization constraints common with high-resolution rasters and complex spatial model outputs (e.g., `terra` and `INLA` objects), 
 we recommend the following approach for full reproducibility:
 
-* Re-running Pre-processing: It is highly recommended to re-run `01-data-preparation.R`, particularly when R session is re-started. 
+* Re-running Pre-processing: It is strongly recommended that you re-run `01_preprocessing.R` step, particularly after restarting your R session or installing new packages. 
 This ensures that the environmental covariates are correctly loaded into your local R memory for subsequent stages.
 
 * Raw Data Access: The original environmental layers are provided in `data/covariates/` to demonstrate the transition from raw geospatial data to the analysis-ready stacks.
@@ -93,7 +93,7 @@ This ensures that the environmental covariates are correctly loaded into your lo
 
 ## 📊 Exploratory Data Analysis (EDA)/Results
 
-The EDA (stage 02) produces two critical outputs, among others.
+The EDA (Stage 02) produces two critical outputs, among others.
 
 - **Bootstrap Replicates**: To assess the uncertainty of covariance parameters (estimated via `kppm` and `variofit`), 
 1,000 parametric bootstrap replicates are generated.
