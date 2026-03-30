@@ -35,12 +35,11 @@ ggsave("figures/fig5_block_cv.jpeg",  p_cv, width = 8, height = 6, dpi = 300)
 rm(datasets, p_cv)
 
 #--- Notes !!! ------------------
-# Prediction grids was created, stored to disk for the prediction.
-# fm_pix <- fm_pixels(mesh, mask = ben_utm)  
-# saveRDS(fm_pix, "data/pred_points.RDS")
-
-# Cleaned raster layers are also saved to disk to avoid serializing issues 
+# Prediction grids was created, and stored to disk for the prediction.
+# saveRDS(fm_pixels(mesh, mask = ben_utm), "data/pred_points.RDS")
 fm_pix <- readRDS("data/pred_points.rds")
+
+# Cleaned rasters are also saved to disk to avoid serialization issues 
 cov_path <- "data/covariates_pc.rds"
 
 xy_obs <- rbind(st_coordinates(point_utm)[, c("X","Y")], 
@@ -60,7 +59,7 @@ roc_composite <- c("auc", "tss", "accuracy")
 
 #--- a) Run a few jobs to test (optional)
 system.time(
-  res_test <- lapply(1:10, function(i){  
+  res_test <- lapply(5:10, function(i){  
     evaluate_model_logged(i, grid, "results", dataset, mesh, proj, boundary = ben_utm, 
                           xy_excluded = xy_obs, cov_path = cov_path, bias_names = "Presence", 
                           metrics = metrics, roc_composite = roc_composite) 
@@ -69,9 +68,7 @@ system.time(
 
 # View results 
 res_df <- do.call(rbind, lapply(res_test, as.data.frame))
-
-res_old <- read.csv("results/Evaluation_roc_final.csv")
-all.equal(res_df$DIC, res_old$DIC)
+print(res_df)
 
 #--- b) Run all jobs serially for ROC-based metrics
 system.time(
@@ -162,7 +159,7 @@ which.max(summary_df$TOT_SCORE_mean)
 
 #--- 2) Significance of the main composite metrics (AUC, TSS , etc.)
 
-# a) Parametric test for total composite score
+# a) Parametric and post-hoc for total composite score
 mod_aov <- aov(TOT_ROC_SCORE ~ Model, data = res_df)
 summary(mod_aov)
 shapiro.test(resid(mod_aov))    # normality satisfied 
@@ -180,13 +177,13 @@ summary(mod_aov)
 shapiro.test(resid(mod_aov))    # normality satisfied
 LSD.test(mod_aov, "Model", group = TRUE, p.adj="bon")$groups
 
-# d)  Parametric and post-hoc tests for Accuracy
+# d)  Parametric test for Accuracy
 mod_aov <- aov(ACCURACY_Comp ~ Model, data = res_df)
 summary(mod_aov)
 shapiro.test(resid(mod_aov))    
 LSD.test(mod_aov, "Model", group = TRUE)$groups
 
-# Nonparametric test
+# Nonparametric and post-hoc tests
 kruskal.test(res_df$ACCURACY_Comp ~ res_df$Model)
 kruskal(res_df$ACCURACY_Comp, res_df$Model, p.adj = "bon")$groups
 
@@ -196,7 +193,7 @@ summary(mod_aov)
 shapiro.test(resid(mod_aov))    
 LSD.test(mod_aov, "Model", group = TRUE)$groups
 
-# Nonparametric test
+# Nonparametric and post-hoc tests
 kruskal.test(res_df$F1_Comp ~ res_df$Model)
 kruskal(res_df$F1_Comp, res_df$Model, p.adj = "bon")$groups
 
