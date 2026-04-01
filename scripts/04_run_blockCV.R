@@ -81,8 +81,8 @@ system.time(
 
 #--- c) Resume missing jobs (if any job crashes or is not done yet) 
 system.time(
-   resume_tasks (grid, results_dir = "results", dataset, 
-              mesh, proj, boundary = ben_utm, xy_excluded = xy_obs, cov_path = cov_path, 
+   resume_tasks (grid, "results", dataset, mesh, proj, 
+              boundary = ben_utm, xy_excluded = xy_obs, cov_path = cov_path, 
               bias_names = "Presence", metrics = metrics, roc_composite = roc_composite) 
  )
 
@@ -239,7 +239,7 @@ summary_df2 <- res_df |>
     DIC_mean = mean(DIC, na.rm = TRUE), 
     DIC_se = std_err(DIC, na.rm = TRUE),
     .groups = "drop" 
-  ) %>%
+  ) |>
   arrange(desc(TOT_SCORE_mean))
 
 # Transpose the table

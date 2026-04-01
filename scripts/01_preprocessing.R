@@ -100,7 +100,7 @@ yrange <- diff(range(st_coordinates(point_utm)[,"Y"]))
 ceiling(max_edge)*c(1, 3)  # max.edge (the outer layer has lower triangles density)
 ceiling(max_edge)*1/2      # cutoff (avoid too many triangles around clustered points)
 
-# The final mesh validated for model fitting (see section 02)
+# The final mesh validated for model fitting (see script 02)
 bndr <- fm_as_segm(ben_utm)
 mesh <- fm_mesh_2d(
   boundary = bndr,
@@ -142,8 +142,16 @@ plot(covar_final, fun = function() lines(vect(ben_utm)))
 dev.off()
 rm(covar_final)
 
+#--- Prepared count data with the covariates for EDA
+data_abund <- extract(r_sc[[vars_pc]], abund_utm) |>  
+  cbind(abund =  abund_utm$abund, counts = abund_utm$counts, area = abund_utm$area, 
+        st_coordinates(abund_utm)[, c("X", "Y")]
+  ) 
+table(complete.cases(data_abund))
+head(data_abund)
+
 #--- Correlation between the final covariates
-p_cor <- data_abund %>% 
+p_cor <- data_abund |> 
   dplyr::select(bio1_wc30s, bio14_wc30s, srtm_slope, CLYPPT_d6, SLTPPT_d2) |>
   ggpairs(upper = list(continuous ='points'), 
                   lower = list(continuous ='cor')
@@ -152,11 +160,3 @@ p_cor <- data_abund %>%
 # Figure 2 (correlation plot)
 ggsave("figures/fig2_covar_corr.jpeg",  p_cor, width = 7, height = 6, dpi = 300)
 rm(p_cor)
-
-#--- Prepared the count data with the covariates for EDA
-data_abund <- extract(r_sc[[vars_pc]], abund_utm) |>  
-  cbind(abund =  abund_utm$abund, counts = abund_utm$counts, area = abund_utm$area, 
-        st_coordinates(abund_utm)[, c("X", "Y")]
-  ) 
-table(complete.cases(data_abund))
-head(data_abund)
