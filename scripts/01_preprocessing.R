@@ -36,7 +36,7 @@ sum(duplicated(point_df))
 
 # Project data into UTM for distance calculation
 point_utm <- st_as_sf(x = point_df, 
-                      coords = c("x", "y"), 
+                      coords = c("long", "lat"), 
                       crs = 4326) |> 
   st_transform(crs = proj)
 nrow(point_utm)
@@ -79,7 +79,7 @@ names(r_sc)
 # Datasets 
 dataset <- list(Presence = point_utm, Count = abund_utm)
 
-# We keep the same order for the selected covariates 
+# We keep a standardised order for the selected covariates 
 vars_pc <- c("bio1_wc30s", "bio14_wc30s", "srtm_slope", "SLTPPT_d2", "CLYPPT_d6")  
 covariates_pc <- r_sc[[vars_pc]]
 

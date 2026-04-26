@@ -29,8 +29,8 @@ in order to reproduce the outputs presented in the paper.
 
 ## 📂 Repository Structure
 * **/data**: 
-    * `Adansonia_occurrence.csv`: Presence-only records (point pattern data).
-    * `Adansonia_abundance.csv`: Site-level counts (point-referenced data).
+    * `Adansonia_occurrence.csv`: Presence-only records (point pattern data) with 1-km jittered coordinates.
+    * `Adansonia_abundance.csv`: Site-level counts (point-referenced data) with 1-km jittered coordinates.
     * `covariates/`: Five clipped GeoTIFF files representing the final predictors retained after selection.
     * `shapefile/`: The polygon map used as the study region and the vector lines delineating the three climatic zones.
     * `covariates_pc.rds`: The five final environmental variables stored in a serialized format.
@@ -41,12 +41,12 @@ in order to reproduce the outputs presented in the paper.
     * `02_EDA.R`: Perform exploratory analysis, particularly spatial dependence assessment, hypothesis testing, and data visualization.
     * `03_evaluation_pipeline.R`: Set up the ISDM pipeline from spatial blocking, fitting, prediction to evaluation.
     * `04_run_blockCV.R`: Run the block cross-validation strategy for the integrated modeling workflow.
-    * `05_model_fitting.R`: Run the INLA-SPDE integrated modeling workflow for the selected model using the original datasets.
+    * `05_model_fitting.R`: Run the INLA-SPDE integrated modeling workflow for the selected model using the full datasets.
     * `06_prediction.R`: Make prediction from the fitted model and compute relevant target quantities.
     * `07_predictive_check.R`: Perform posterior predictive check (PPC) from the integrated models.
     * `08_utils.R`: Utility functions used in other scripts.
     
-* **/figures**: The figures generated from the analysis.
+* **/figures**: The figures generated from the analysis using the raw datasets. 
 
 * **/results**: Contains the pre-computed covariance parameters for `LGCP` and `variofit` models (see `02_EDA.R`)
 
@@ -90,6 +90,9 @@ This ensures that the environmental covariates are correctly loaded into your lo
 * Raw Data Access: The original environmental layers are provided in `data/covariates/` to demonstrate the transition from raw geospatial data to the analysis-ready stacks.
 
 * Serialized Alternative: Pre-processed covariates are available as `covariates_pc.rds`. If using it, ensure that object names are mapped according to the naming conventions established in all scripts.
+
+* For public distribution and ethical compliance for protected species and settlements locations, the datasets provided in the `data/` folder have been de-identified via a 1-km jitter. 
+While this does not significantly alter the scale of predictions, users may notice microscopic variations if re-running the plotting scripts.
 
 ## 📊 Exploratory Data Analysis (EDA)/Results
 

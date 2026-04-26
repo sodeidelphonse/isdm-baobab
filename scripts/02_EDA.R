@@ -392,7 +392,7 @@ if (file.exists("results/simulations_variofit.csv")) {
       )
       sim_geor[i, ] <- c(fit_sim$sigmasq, fit_sim$phi)
     })
-    # Save the simulated matrix as a backup 
+    # Save the simulated matrix as a backup or for further use
     write.csv(data.frame(sim_geor), "results/simulations_variofit.csv")
 }
 

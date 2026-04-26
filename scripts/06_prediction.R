@@ -122,7 +122,7 @@ p <- generate_maps (resp_pc,
                     yaxis_breaks = seq(6, 13, 2)
                     )
 
-# Figure B1 (density)
+# Figure B1 
 p <- p + ggplot2::geom_sf(data = zc_utm, fill = NA, color = "grey20", linewidth = 0.3)
 print(p)
 ggsave("figures/fig_B1_rel_abund.jpeg",  p, width = 7, height = 5, dpi = 300)
@@ -288,7 +288,7 @@ marginals$parameter <- factor(marginals$parameter, levels =
 )
 levels(marginals$parameter)
 
-# Figure 6 (parameters' marginals)
+# Figure B4 (parameters' marginals)
 plot_hyper <- ggplot(marginals, aes(x = x, y = y)) + 
   geom_line() +
   facet_wrap(~ parameter, scales = "free", ncol = 3) +
@@ -355,7 +355,7 @@ p6 <- ggplot(pred, aes(x = CLYPPT_d6, y = mean)) +
   theme_gray()
 p6
 
-# Visualisation
+# Figure 6
 plot_cov <- p1 + p3 + p4 + p5 + p6 + plot_layout(ncol = 2)
 print(plot_cov)
 ggsave("figures/fig6_intensity_vs_covariate.jpeg",  plot_cov, width = 6, height = 6, dpi = 200)
