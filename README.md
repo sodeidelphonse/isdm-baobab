@@ -50,7 +50,7 @@ in order to reproduce the outputs presented in the paper.
 
 * **/results**: Contains the pre-computed covariance parameters for `LGCP` and `variofit` models (see `02_EDA.R`)
 
-* **/software**: The archive of `isdmtools` package used for preparing the manuscript.
+* **/software**: The archive of `isdmtools` package used for preparing the manuscript. Both binary and source codes are provided.
 
 * `README.md`: The project documentation (this page).
 
