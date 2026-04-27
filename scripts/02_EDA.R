@@ -9,12 +9,10 @@
 library(geoR)
 library(spatstat.explore) 
 library(spatstat.model)
-library(patchwork)
-library(ggplot2)
 library(ggspatial)
 library(INLA)
 library(inlabru)
-library(isdmtools)  # Install it from the binary zip file or from GitHub
+library(isdmtools)  # Install the version v0.4.0 from the binary/source files or from GitHub
 source("scripts/08_utils.r")
 
 #--------------------------------
@@ -216,8 +214,8 @@ obs_po <- bru_obs(
 
 # Fit the initial LGCP model with the empirical Bayes integration  
 fit_lgcp_spde0 <- bru(cmp_po, obs_po, 
-                   options = list(control.inla = list(int.strategy = "eb")
-                      ))
+                     options = list(control.inla = list(int.strategy = "eb"))
+                     )
 summary(fit_lgcp_spde0)
 
 
@@ -251,6 +249,7 @@ fit_lgcp_spde <- bru(cmp_po, obs_po,
 summary(fit_lgcp_spde)
 
 #--- Difference of DIC between mesh configurations -----
+# A configuration with the lower DIC is preferable
 fit_lgcp_spde0$dic$dic - fit_lgcp_spde$dic$dic
 
 
@@ -392,7 +391,7 @@ if (file.exists("results/simulations_variofit.csv")) {
       )
       sim_geor[i, ] <- c(fit_sim$sigmasq, fit_sim$phi)
     })
-    # Save the simulated matrix as a backup or for further use
+    # Save the simulated matrix as a backup and for further use
     write.csv(data.frame(sim_geor), "results/simulations_variofit.csv")
 }
 
@@ -413,7 +412,7 @@ quantile(sim_geor[, "phi"]*sqrt(8), probs = c(0.025, 0.975))
 # The 10% Practical range 
 solve_practical_range(param_val = est_phi, nu = 1, thresh = 0.1, engine = "geor")
 
-# The 10% practical range for replicates 
+# The 10% practical range for replicated data
 prac_vec_geor <- sapply(sim_geor[,"phi"], function(p) {
   solve_practical_range(param_val = p, nu = 1, thresh = 0.1, 
                         engine = "geor")
@@ -445,7 +444,7 @@ if (file.exists("results/simulations_lgcp.csv")) {
 } else {
   message("No pre-calculated files found. Starting 1,000 simulations (this may take > 1 hour)...")
   sim_lgcp <- matrix(NA, nrow = nsim, ncol = 2) 
-  colnames(sim_lgcp) <- c("sigma_sq", "eta")
+  colnames(sim_lgcp) <- c("sigma_sq", "alpha")
   
   # These simulations are highly time consuming !!!
    system.time(
@@ -463,16 +462,16 @@ if (file.exists("results/simulations_lgcp.csv")) {
 quantile(sim_lgcp[, "sigma_sq"], probs = c(0.025, 0.975))
 
 # 95% CI for alpha
-quantile(sim_lgcp[, "eta"], probs = c(0.025, 0.975))
+quantile(sim_lgcp[, "alpha"], probs = c(0.025, 0.975))
 
 # 95% CI for kappa
-quantile(sqrt(8)/(sim_lgcp[, "eta"] * 2), probs = c(0.025, 0.975))
+quantile(sqrt(8)/(sim_lgcp[, "alpha"] * 2), probs = c(0.025, 0.975))
 
 # 95% CI for the range: 2*alpha 
-quantile(sim_lgcp[, "eta"] * 2, probs = c(0.025, 0.975))
+quantile(sim_lgcp[, "alpha"] * 2, probs = c(0.025, 0.975))
 
 # 95% CI for the 10% practical range 
-prac_vec_spat <- sapply(sim_lgcp[, "eta"], function(p) {
+prac_vec_spat <- sapply(sim_lgcp[, "alpha"], function(p) {
   solve_practical_range(param_val = p,  nu = 1, thresh = 0.1, 
                         engine = "spatstat")
 })

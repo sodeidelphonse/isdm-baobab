@@ -46,7 +46,7 @@ abund_df <- read.csv("data/Adansonia_abundance.csv")
 sum(duplicated(abund_df))
 
 abund_utm <- abund_df |> 
-  dplyr::distinct() |> 
+  dplyr::distinct() |>   # duplicates were removed from the raw data
   st_as_sf(coords = c("long", "lat"), crs = 4326) |> 
   st_transform(crs = proj)
 dim(abund_utm)
@@ -66,7 +66,7 @@ r_sc <- lapply(r_files, function(f) {
   resample(r, r_tmp, method = "bilinear")
 })
 
-# Project and standardise outputs
+# Project and standardise the outputs
 r_sc <- rast(r_sc) |> 
   project(proj) |> 
   scale()
@@ -112,7 +112,6 @@ mesh <- fm_mesh_2d(
 mesh$n
 
 # Figure A3
-plot(mesh)
 png(file = "figures/fig_A3_mesh.jpeg", width = 500, height = 800)
 plot(mesh)
 dev.off()
