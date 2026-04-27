@@ -81,18 +81,17 @@ This analysis is designed as a sequential pipeline (01–08). Each stage relies 
     
 ## 💾 Spatial Data Notes
 
-Due to serialization constraints common with high-resolution rasters and complex spatial model outputs (e.g., `terra` and `INLA` objects), 
-we recommend the following approach for full reproducibility:
+* Due to serialization constraints common with high-resolution rasters and complex spatial model outputs (e.g., `terra` and `INLA` objects), we recommend the following approach for full reproducibility:
 
-* Re-running Pre-processing: It is strongly recommended that you re-run `01_preprocessing.R` step, particularly after restarting your R session or installing new packages. 
-This ensures that the environmental covariates are correctly loaded into your local R memory for subsequent stages.
+  * Re-running Pre-processing: It is strongly recommended that you re-run `01_preprocessing.R` step, particularly after restarting your R session or installing new packages. 
+  This ensures that the environmental covariates are correctly loaded into your local R memory for subsequent stages.
 
-* Raw Data Access: The original environmental layers are provided in `data/covariates/` to demonstrate the transition from raw geospatial data to the analysis-ready stacks.
+  * Raw Data Access: The original environmental layers are provided in `data/covariates/` to demonstrate the transition from raw geospatial data to the analysis-ready stacks.
 
-* Serialized Alternative: Pre-processed covariates are available as `covariates_pc.rds`. If using it, ensure that object names are mapped according to the naming conventions established in all scripts.
+  * Serialized Alternative: Pre-processed covariates are available as `covariates_pc.rds`. If using it, ensure that object names are mapped according to the naming conventions established in all scripts.
 
-* For public distribution and ethical compliance for protected species and settlements locations, the datasets provided in the `data/` folder have been de-identified via a 1-km jitter. 
-While this does not significantly alter the scale of predictions, users may notice microscopic variations if re-running the plotting scripts.
+* To facilitate public distribution and ensure ethical compliance for protected species and privacy of surveyed settlements, the datasets provided in the `data/` folder have been de-identified via a 1-km jitter. 
+While this does not significantly alter the scale of predictions, users may notice microscopic variations if re-running the distance and plotting scripts.
 
 ## 📊 Exploratory Data Analysis (EDA)/Results
 
