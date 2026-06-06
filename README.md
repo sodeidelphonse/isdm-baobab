@@ -1,8 +1,23 @@
 
 
-# Reproducibility Package: Integrated Species Distribution Modeling of the African Baobab in Benin.
+# Reproducibility Package: Integrated Species Distribution Modelling of the African Baobab in Benin.
 
-This repository contains the data and code required to reproduce the analyses presented in the manuscript: *"Sode et al. Integrating Presence-only and Abundance Data to Predict Baobab (*Adansonia digitata* L.) Distribution: A Bayesian Data Fusion Framework"*. 
+This repository contains the data and code required to reproduce the analyses presented in the paper: 
+
+Sode, A.I., Fandohan, A.B., Krainski, T.E., Assogbadjo, A.E., & Glèlè Kakaï, R. (2026). Integrating Presence-only and Abundance Data to Predict Baobab (*Adansonia digitata L.*) Distribution: A Bayesian Data Fusion Framework. *Environmental and Ecological Statistics*. https://doi.org/10.1007/s10651-026-00737-2 
+
+## Table of contents
+* [Overview](#overview)
+* [Quick Start](#quick-start)
+* [Requirements](#requirements)
+* [Repository Structure](#repository-structure)
+* [Environment Configuration](#environment-configuration)
+* [Pipeline Logic](#pipeline-logic)
+* [Spatial Data Notes](#spatial-data-notes)
+* [Exploratory Analysis Outputs](#exploratory-analysis-outputs)
+* [License](#license)
+* [Citation](#citation)
+* [Contact & Support](#contact-support)
 
 ## 📝 Overview 
 The study utilises a Bayesian spatial fusion framework with `inlabru` and `isdmtools` to integrate presence-only (GBIF and field records) and structured abundance data of the African baobab. 
@@ -24,7 +39,7 @@ The aim is to comprehend and map the spatial variation of this multipurpose agro
 install.packages("remotes") 
 remotes::install_github("sodeidelphonse/isdmtools@v0.4.0")
 ```
-* **`INLA`:** The workflow requires the package [INLA](https://www.r-inla.org/download-install) `v24.06.27` 
+* **`INLA`:** The workflow requires the package [INLA](https://www.r-inla.org/download/index.html) `v24.06.27` 
 in order to reproduce the outputs presented in the paper.
 
 ## 📂 Repository Structure
@@ -54,14 +69,14 @@ in order to reproduce the outputs presented in the paper.
 
 * `README.md`: The project documentation (this page).
 
-## 📦 Reproducing the environment
+## 📦 Environment Configuration
 To reproduce the environment used for the analysis:
 
 * Make sure you have the `renv` package installed by running `install.packages("renv")`. 
 
 * With the project root as your working directory, run `renv::restore()` to automatically download and install all required library versions.
 
-## ⚙️ Pipeline Logic 
+## ⚙️ Pipeline Logic
 This analysis is designed as a sequential pipeline (01–08). Each stage relies on the outputs of the preceding stages and the shared utility functions:
 
 * **Sequential Flow**: To reproduce the full results, it is recommended to run the scripts in numerical order.
@@ -83,22 +98,22 @@ This analysis is designed as a sequential pipeline (01–08). Each stage relies 
 
 * Due to serialization constraints common with high-resolution rasters and complex spatial model outputs (e.g., `terra` and `INLA` objects), we recommend the following approach for full reproducibility:
 
-  * Re-running Pre-processing: It is strongly recommended that you re-run `01_preprocessing.R` step, particularly after restarting your R session or installing new packages. 
+  * Re-running Pre-processing: It is strongly recommended that you re-run `01_preprocessing.R` step, particularly after restarting your R session. 
   This ensures that the environmental covariates are correctly loaded into your local R memory for subsequent stages.
 
   * Raw Data Access: The original environmental layers are provided in `data/covariates/` to demonstrate the transition from raw geospatial data to the analysis-ready stacks.
 
   * Serialized Alternative: Pre-processed covariates are available as `covariates_pc.rds`. If using it, ensure that object names are mapped according to the naming conventions established in all scripts.
 
-* To facilitate public distribution and ensure ethical compliance for protected species and privacy of surveyed settlements, the datasets provided in the `data/` folder have been de-identified via a 1-km jitter. 
-While this does not significantly alter the scale of predictions, users may notice microscopic variations if re-running the distance and plotting scripts.
+* To facilitate public distribution and ensure the privacy of surveyed settlements is protected, the datasets provided in the `data/` folder have been de-identified using a 1-km jitter. 
+While this does not significantly alter the scale of the predictions, users may notice minor variations if they re-run the distance and plotting scripts.
 
-## 📊 Exploratory Data Analysis (EDA)/Results
+## 📊 Exploratory Analysis Outputs
 
-The EDA (Stage 02) produces two critical outputs, among others.
+The Exploratory Data Analysis (Stage 02) produces two critical outputs, among others.
 
 - **Bootstrap Replicates**: To assess the uncertainty of covariance parameters (estimated via `kppm` and `variofit`), 
-1,000 parametric bootstrap replicates are generated.
+1000 parametric bootstrap replicates are generated.
 
 - **Fast-Track**: To save time, pre-calculated replicates for these parameters are provided in:
   - `results/simulations_lgcp.csv`
@@ -106,9 +121,30 @@ The EDA (Stage 02) produces two critical outputs, among others.
   
 - **Purpose**: These estimates establish the baseline spatial range used to inform the SPDE priors in the integrated models.
 
-## 📧 Contact
-For questions regarding the [`isdmtools`](https://sodeidelphonse.github.io/isdmtools/) implementation or data processing, 
-please contact the corresponding author or open an issue on the package [repository](https://github.com/sodeidelphonse/isdmtools/issues).
-
 ## ⚖️ License
 This repository is released under the [MIT License](LICENSE).
+
+## 📑 Citation 
+If you use this repository, the underlying data, or the specific analysis pipeline in your research, please cite them as follows:
+
+- **The Core Methodology & Application Paper**: 
+Our foundational study on the African baobab datasets in Benin is published in *Environmental and Ecological Statistics*:
+
+  Sode, A.I., Fandohan, A.B., Krainski, T.E., Assogbadjo, A.E., & Glèlè Kakaï, R. (2026). Integrating presence-only and abundance data to predict baobab (*Adansonia digitata L.*) distribution: a Bayesian data fusion framework. *Environmental and Ecological Statistics*. https://doi.org/10.1007/s10651-026-00737-2
+
+- **The Project Archive**: 
+The complete reproducible archive for this study—including the 1-km jittered datasets, repository export, `isdmtools v0.4.0` source code, pre-computed outputs, and figures—is permanently archived on Zenodo:
+
+  Sode, A.I., Fandohan, A.B., Krainski, T.E., Assogbadjo, A.E., & Glèlè Kakaï, R. (2026). Research compendium for integrating and predicting baobab (*Adansonia digitata L.*) distribution in Benin using a Bayesian data fusion framework: Data, pipelines, and isdmtools v0.4.0 source code (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.19227943
+
+- **The `isdmtools` R Package**: 
+The underlying computational infrastructure used for multisource spatial data resampling and ISDM evaluation is part of the `isdmtools` R package. A dedicated software manuscript is currently in preparation. To cite the package software itself with its latest version, please use:
+
+```R
+citation("isdmtools")
+```
+## 📧 Contact & Support
+The best way to get help with `isdmtools` or the data analysis pipeline is to open an issue on the package [issue tracker](https://github.com/sodeidelphonse/isdmtools/issues). This allows the community to benefit from the discussion.
+
+For private inquiries or data sharing questions that cannot be posted publicly, you may contact the corresponding author at [sdidelphonse@gmail.com](mailto:sdidelphonse@gmail.com).
+
