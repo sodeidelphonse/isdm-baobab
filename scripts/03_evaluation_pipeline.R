@@ -12,14 +12,14 @@
 #' @param model_name character. The name of the actual candidate model
 #' @param response_type character. The type of response to fit ("joint.po", "count" or "po")
 #' @param dataset A named list of spatial datasets to integrate
-#' @param mesh A two-dimensional mesh created with `INLA` or `fmesher` for the spatial latent process
+#' @param mesh A two-dimensional mesh to be created with `fmesher` for the spatial latent process
 #' @param proj character. It specify the spatial data projection system 
 #' @param boundary An sf polygon object defining the study region
 #' @param xy_excluded An optional sf object to specify locations to exclude during the background sampling
 #' @param cov_path The path to the serialised raster covariates (useful for parallel process)
 #' @param bias_names character. The vector of names of datasets for which a bias field must be define
-#' @param metrics A character vector of evaluation metrics to request during the evaluation process
-#' @param roc_composite A character vector of ROC-based metrics to request for the overall score
+#' @param metrics character. The vector of metrics to request during the evaluation process
+#' @param roc_composite character. The vector of ROC-based metrics to request for the overall score
 #' @param prior.sigma The vector of PC prior for the marginal variance
 #' @param prior.range The vector of PC prior parameters for the spatial range 
 #' @param Offset character. The name of the offset variable in the abundance dataset
@@ -28,7 +28,7 @@
 #' @param int.strategy character. Indicates the integration strategy to use by the INLA engine
 #' Defaulted to empirical Bayes ("eb")
 #' @param diagonal numeric. A value added to the diagonal elements to stabilize the precision matrix
-#' @param seed The integer. The seed generator for the reproducibility of the background sample
+#' @param seed integer. The seed generator for the reproducibility of the background sample
 #' @param verbose logical. Indicates if the details on each model fitting will be shown in the R session
 #' @param ... additional arguments passed on to internal functions
 #' 
