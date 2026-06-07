@@ -3031,7 +3031,7 @@
       "Version": "0.4.0",
       "Source": "GitHub",
       "Type": "Package",
-      "Title": "Toolkit for Evaluating and Analysing Integrated Species Distribution Models in R",
+      "Title": "A Reproducible R Framework for Spatial Data Resampling and Multisource Validation of Integrated Species Distribution Models",
       "Authors@R": "c(person(given = \"Akoeugnigan Idelphonse\", family = \"SODE\", email = \"sdidelphonse@gmail.com\", role = c(\"aut\", \"cre\"),  comment = c(ORCID = \"0000-0002-8556-239X\", \"SODE A. Idelphonse - continued development of the main code\")), person(given = \"Adandé Belarmain\", family = \"Fandohan\", role = \"ctb\"), person(given = \"Elias Teixeira\", family = \"Krainski\", role = \"ctb\"),       person(given = \"Romain\", family = \"Glèlè Kakaï\", role = \"ctb\"))",
       "Date": "2025-09-08",
       "Maintainer": "<sdidelphonse@gmail.com>",
@@ -3073,7 +3073,7 @@
       "RemoteRepo": "isdmtools",
       "RemoteUsername": "sodeidelphonse",
       "RemoteRef": "v0.4.0",
-      "RemoteSha": "de8418821d1b814a7950e120d2a37fa4fd5da245",
+      "RemoteSha": "8ba5b358b984121499a18933c682d2c09c31f3bc",
       "NeedsCompilation": "no",
       "Author": "Akoeugnigan Idelphonse SODE [aut, cre] (<https://orcid.org/0000-0002-8556-239X>, SODE A. Idelphonse - continued development of the main code), Adandé Belarmain Fandohan [ctb], Elias Teixeira Krainski [ctb], Romain Glèlè Kakaï [ctb]"
     },
