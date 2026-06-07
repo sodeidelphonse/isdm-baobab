@@ -130,12 +130,12 @@ If you use this repository, the underlying data, or the specific analysis pipeli
 - **The Core Methodology & Application Paper**: 
 Our foundational study on the African baobab datasets in Benin is published in *Environmental and Ecological Statistics*:
 
-  Sode, A.I., Fandohan, A.B., Krainski, T.E., Assogbadjo, A.E., & Glèlè Kakaï, R. (2026). Integrating presence-only and abundance data to predict baobab (*Adansonia digitata L.*) distribution: a Bayesian data fusion framework. *Environmental and Ecological Statistics*. https://doi.org/10.1007/s10651-026-00737-2
+  Sode, A.I., Fandohan, A.B., Krainski, T.E., Assogbadjo, A.E., & Glèlè Kakaï, R. (2026). Integrating presence-only and abundance data to predict baobab (*Adansonia digitata* L.) distribution: a Bayesian data fusion framework. *Environmental and Ecological Statistics*. https://doi.org/10.1007/s10651-026-00737-2
 
 - **The Project Archive**: 
 The complete reproducible archive for this study—including the 1-km jittered datasets, repository export, `isdmtools v0.4.0` source code, pre-computed outputs, and figures—is permanently archived on Zenodo:
 
-  Sode, A.I., Fandohan, A.B., Krainski, T.E., Assogbadjo, A.E., & Glèlè Kakaï, R. (2026). Research compendium for integrating and predicting baobab (*Adansonia digitata L.*) distribution in Benin using a Bayesian data fusion framework: Data, pipelines, and isdmtools v0.4.0 source code (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.19227943
+  Sode, A.I., Fandohan, A.B., Krainski, T.E., Assogbadjo, A.E., & Glèlè Kakaï, R. (2026). Research compendium for integrating and predicting baobab (*Adansonia digitata* L.) distribution in Benin using a Bayesian data fusion framework: Data, pipelines, and isdmtools v0.4.0 source code (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.19227943
 
 - **The `isdmtools` R Package**: 
 The underlying computational infrastructure used for multisource spatial data resampling and ISDM evaluation is part of the `isdmtools` R package. A dedicated software manuscript is currently in preparation. To cite the package software itself with its latest version, please use:
