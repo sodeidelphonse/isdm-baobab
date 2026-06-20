@@ -7,17 +7,17 @@ This repository contains the data and code required to reproduce the analyses pr
 Sode, A.I., Fandohan, A.B., Krainski, E.T., Assogbadjo, A.E., & Glèlè Kakaï, R. (2026). Integrating presence-only and abundance data to predict baobab (*Adansonia digitata L.*) distribution: a Bayesian data fusion framework. *Environmental and Ecological Statistics*. https://doi.org/10.1007/s10651-026-00737-2 
 
 ## Table of contents
-* [📝 Overview](#overview)
-* [🚀 Quick Start](#quick-start)
-* [🛠 Requirements](#requirements)
-* [📂 Repository Structure](#repository-structure)
-* [📦 Environment Configuration](#environment-configuration)
-* [⚙️ Pipeline Logic](#pipeline-logic)
-* [💾 Spatial Data Notes](#spatial-data-notes)
-* [📊 Exploratory Analysis Outputs](#exploratory-analysis-outputs)
-* [⚖️ License](#license)
-* [📑 Citation](#citation)
-* [📧 Contact & Support](#contact-support)
+* [Overview](#overview)
+* [Quick Start](#quick-start)
+* [Requirements](#requirements)
+* [Repository Structure](#repository-structure)
+* [Environment Configuration](#environment-configuration)
+* [Pipeline Logic](#pipeline-logic)
+* [Spatial Data Notes](#spatial-data-notes)
+* [Exploratory Analysis Outputs](#exploratory-analysis-outputs)
+* [License](#license)
+* [Citation](#citation)
+* [Contact & Support](#contact-support)
 
 ## 📝 Overview 
 The study utilises a Bayesian spatial fusion framework with `inlabru` and `isdmtools` to integrate presence-only (GBIF and field records) and structured abundance data of the African baobab. 
