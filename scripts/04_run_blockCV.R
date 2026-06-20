@@ -9,11 +9,13 @@
 library(sf)
 library(terra)
 library(ggplot2)
-library(blockCV)
-library(pROC)
 library(inlabru)
 library(PointedSDMs)
 library(isdmtools)
+
+library(dplyr)
+library(data.table)
+library(agricolae)
 
 source("scripts/03_evaluation_pipeline.r")
 source("scripts/08_utils.r")
@@ -117,10 +119,6 @@ res_jt_df
 #-------------------------------------------
 #--- Analysis of results (metrics Table)
 #-------------------------------------------
-
-library(dplyr)
-library(data.table)
-library(agricolae)
 
 #--- 1) ROC-based metrics summary --------------
 res_df <- compile_results ("results") |> 

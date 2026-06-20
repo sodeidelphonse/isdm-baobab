@@ -6,12 +6,11 @@
 #---- 1) Integrated Habitat Suitability Mapping 
 #-------------------------------------------------
 
-library(sf)
 library(terra)
-library(ggplot2)
-library(patchwork)
 library(PointedSDMs)
 library(isdmtools)
+library(ggplot2)
+library(patchwork)
 
 source("scripts/08_utils.r")
 fm_pix <- readRDS("data/pred_points.rds")
@@ -26,8 +25,7 @@ form_cov <- ~ bio1_wc30s +bio14_wc30s +srtm_slope +SLTPPT_d2 + CLYPPT_d6
 # Prediction
 jint <- predict(spat_shared, 
                 data = fm_pix, 
-                formula = update.formula(form_cov, ~. + shared_spatial +
-                                           Presence_intercept),
+                formula = update.formula(form_cov, ~. +shared_spatial +Presence_intercept),
                 fun = "linear", n.samples = 1000, seed = 24)
 
 jint <- format_predictions(jint)  
@@ -182,13 +180,13 @@ jint_ct <- format_predictions(jint_pc)
 
 # On log scale 
 var_names <- c("x", "y", "mean", "sd", "q0.025", "q0.5", "q0.975", "median")
-jint_ct_r <- terra::rast(jint_ct[, var_names], type = "xyz", crs = proj) 
+jint_ct_r <- rast(jint_ct[, var_names], type = "xyz", crs = proj) 
 resp_val_jt <- extract(jint_ct_r, dataset$Count)
 
-pred_ct_r <- terra::rast(pred_pc[, var_names], type = "xyz", crs = proj)
+pred_ct_r <- rast(pred_pc[, var_names], type = "xyz", crs = proj)
 resp_val_ct <- extract(pred_ct_r, dataset$Count)
 
-# Correlation (integrated counts, separate model counts)
+# Correlation of integrated counts vs separate model counts
 cor.test(resp_val_jt$mean,  resp_val_ct$mean)
 
 df_resp <- data.frame(resp_val_jt = resp_val_jt$mean, resp_val_ct = resp_val_ct$mean)
@@ -214,13 +212,13 @@ jint_po <- format_predictions(jint_po)
 
 # On log-intensity scale 
 var_names <- c("x", "y", "mean", "sd", "q0.025", "q0.5", "q0.975", "median")
-jint_po_r   <- terra::rast(jint_po[, var_names], type = "xyz", crs = proj) 
+jint_po_r   <- rast(jint_po[, var_names], type = "xyz", crs = proj) 
 pred_jt_val <- extract(jint_po_r, dataset$Presence)
 
-pred_po_r   <- terra::rast(pred_po[, var_names], type = "xyz", crs = proj) 
+pred_po_r   <- rast(pred_po[, var_names], type = "xyz", crs = proj) 
 pred_po_val <- extract(pred_po_r, dataset$Presence)
 
-# Correlation (joint prob, separate PO prob)
+# Correlation of joint prob vs separate PO prob
 cor.test(pred_jt_val$mean,  pred_po_val$mean)
 
 df_pred <- data.frame(pred_jt = pred_jt_val$mean, pred_po = pred_po_val$mean)
@@ -250,22 +248,18 @@ p <- ggplot()+
 # Figure B3
 ggsave("figures/fig_B3_random_bio14.jpeg", p, width = 5, height = 4, dpi = 300)
 
-p <- ggplot()+
-  gg(spat_shared$summary.random$shared_spatial)
-ggsave("random_shared.jpeg", p, width = 5, height = 4, dpi = 300)
-
-# Spatial range of bio14 on scaled level (corresponds to ID ~ 1)
+# Spatial range of bio14 on standardised scale (corresponds to an index ~ 1)
 bio14_rand <- spat_shared$summary.random$bio14_wc30s
 bio14_est  <- bio14_rand[2, c("mean", "0.025quant", "0.975quant")]
 
-#--- b) Posterior distribution of latent covariance function 
+#--- b) Posterior distribution of latent covariance parameters 
 plot(spde.posterior(spat_shared, "shared_spatial", what = "range"))/
   plot(spde.posterior(spat_shared, "shared_spatial", what = "variance"))
 
 plot(spde.posterior(spat_shared, "bio14_wc30s", what = "range"))/
   plot(spde.posterior(spat_shared, "bio14_wc30s", what = "variance"))
 
-#--- c) Marginals of hyper parameters 
+#--- c) Marginals of hyper parameters and fixed effects
 list_marginals <- list(
   "Range for shared spatial" = spat_shared$marginals.hyperpar$"Range for shared_spatial",
   "StDev for shared spatial" = spat_shared$marginals.hyperpar$"Stdev for shared_spatial",
@@ -301,16 +295,9 @@ ggsave("figures/fig_B4_shared_marginals_hyper.jpeg", plot_hyper, width = 7, heig
 #--- 4) Relationship of log-intensity vs covariates 
 #------------------------------------------------------
 
-var_names <- c("x", "y", "bio1_wc30s", "bio14_wc30s", "srtm_slope", "SLTPPT_d2", "CLYPPT_d6", 
-             "mean", "sd", "q0.025", "q0.5", "q0.975", "median")
-
-#jint_rast <- terra::rast(jint[, var_names], type = "xyz", crs = proj) 
-#jint_df <- extract(jint_rast, xy_obs)
-
 pred <- jint 
 p1 <- ggplot(pred, aes(x = bio1_wc30s, y = mean)) +
   geom_point(alpha = 0.6, size = 0.1, color = "gray20") +
-  #geom_smooth(method = "loess", formula = y ~ x, span = 0.6, col = "green", se = FALSE) +
   geom_smooth(method = "lm", formula = y ~ x, span = 0.6, col = "blue", se = FALSE) +
   coord_cartesian(ylim = c(-8, max(pred$mean))) +
   labs(x = "Annual temperature", y = "Log intensity") +
