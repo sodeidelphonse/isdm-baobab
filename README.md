@@ -1,23 +1,23 @@
 
 
-# Reproducibility Package: Integrated Species Distribution Modelling of the African Baobab in Benin.
+# Reproducibility package: Integrated species distribution modelling of the African baobab in Benin.
 
 This repository contains the data and code required to reproduce the analyses presented in the paper: 
 
 Sode, A.I., Fandohan, A.B., Krainski, E.T., Assogbadjo, A.E., & Glèlè Kakaï, R. (2026). Integrating presence-only and abundance data to predict baobab (*Adansonia digitata L.*) distribution: a Bayesian data fusion framework. *Environmental and Ecological Statistics*. https://doi.org/10.1007/s10651-026-00737-2 
 
 ## Table of contents
-* [Overview](#overview)
-* [Quick Start](#quick-start)
-* [Requirements](#requirements)
-* [Repository Structure](#repository-structure)
-* [Environment Configuration](#environment-configuration)
-* [Pipeline Logic](#pipeline-logic)
-* [Spatial Data Notes](#spatial-data-notes)
-* [Exploratory Analysis Outputs](#exploratory-analysis-outputs)
-* [License](#license)
-* [Citation](#citation)
-* [Contact & Support](#contact-support)
+* [📝 Overview](#overview)
+* [🚀 Quick Start](#quick-start)
+* [🛠 Requirements](#requirements)
+* [📂 Repository Structure](#repository-structure)
+* [📦 Environment Configuration](#environment-configuration)
+* [⚙️ Pipeline Logic](#pipeline-logic)
+* [💾 Spatial Data Notes](#spatial-data-notes)
+* [📊 Exploratory Analysis Outputs](#exploratory-analysis-outputs)
+* [⚖️ License](#license)
+* [📑 Citation](#citation)
+* [📧 Contact & Support](#contact-support)
 
 ## 📝 Overview 
 The study utilises a Bayesian spatial fusion framework with `inlabru` and `isdmtools` to integrate presence-only (GBIF and field records) and structured abundance data of the African baobab. 
@@ -31,7 +31,7 @@ The aim is to comprehend and map the spatial variation of this multipurpose agro
 
 ## 🛠 Requirements ️
 * **Language:** R (v4.4.1)
-* **Key Packages:** `isdmtools`, `inlabru`, `PointedSDMs`, `INLA`, `sf`, `pROC`, and `blockCV`. See the scripts for other required packages. 
+* **Key Packages:** `isdmtools`, `inlabru`, `PointedSDMs`, `INLA`, `sf`, and `terra`. See the scripts for other required packages. 
 * **Environment:** `renv.lock` file is provided to restore the exact library versions used in this analysis.
 * **`isdmtools`:** which is not yet available on CRAN can be installed as follows:
 
@@ -42,7 +42,7 @@ remotes::install_github("sodeidelphonse/isdmtools@v0.4.0")
 * **`INLA`:** This workflow requires the package [INLA](https://www.r-inla.org/download/index.html) `v24.06.27` in order to reproduce the outputs presented in the paper.
 
 ## 📂 Repository Structure
-* **/data**: 
+* **data/**: 
     * `Adansonia_occurrence.csv`: Presence-only records (point pattern data) with 1-km jittered coordinates.
     * `Adansonia_abundance.csv`: Site-level counts (point-referenced data) with 1-km jittered coordinates.
     * `covariates/`: Five clipped `GeoTIFF` files representing the final predictors retained after selection.
@@ -50,7 +50,7 @@ remotes::install_github("sodeidelphonse/isdmtools@v0.4.0")
     * `covariates_pc.rds`: The five final environmental variables stored in a serialised format.
     * `pred_points.rds`: The regular grid points locations stored in a serialised format for the model prediction.
 
-* **/scripts**:
+* **scripts/**:
     * `01_preprocessing.R`: Import and clean datasets and generate mesh configurations.
     * `02_EDA.R`: Perform exploratory analysis, particularly spatial dependence assessment, hypothesis testing, and data visualisation.
     * `03_evaluation_pipeline.R`: Set up the ISDM pipeline from spatial blocking, fitting, prediction to evaluation.
@@ -60,11 +60,11 @@ remotes::install_github("sodeidelphonse/isdmtools@v0.4.0")
     * `07_predictive_check.R`: Perform posterior predictive check (PPC) from the integrated models.
     * `08_utils.R`: Utility functions used in other scripts during the analysis.
     
-* **/figures**: The figures generated from the analysis using the raw datasets. 
+* **figures/**: The figures generated from the analysis using the raw datasets. 
 
-* **/results**: Contains the pre-computed covariance parameters for `LGCP` and `variofit` models (see `02_EDA.R`)
+* **results/**: Contains the pre-computed covariance parameters for `LGCP` and `variofit` models (see `02_EDA.R`)
 
-* **/software**: The archive of the `isdmtools` package used for preparing the manuscript. Both binary and source codes are provided.
+* **software/**: The archive of the `isdmtools` package used for preparing the manuscript. Both binary and source codes are provided.
 
 * `README.md`: The project documentation (this page).
 
