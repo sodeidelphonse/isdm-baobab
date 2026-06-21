@@ -71,13 +71,13 @@ system.time(jfit_nb <- bru(jcmp1, obs_nb, obs_pp,
             )
 summary(jfit_nb) 
 
-# Difference in DIC: The Poisson family did a good job !
+# Difference in DIC: The Poisson family fits the data well.
 jfit_pois$dic$dic - jfit_nb$dic$dic
 
 
 #--- Residuals analysis for the fitted models -----
 
-# Generate 1,000 posterior samples for each count model
+# Generate 1000 posterior samples for each family of count observation part
 set.seed(234)
 samples <- lapply(list(pois = jfit_pois, nb = jfit_nb),  
                   function(model) {
@@ -93,11 +93,11 @@ ppc_pois <- simulate_replicates(samples$pois, family = "poisson")
 
 res_dharm_pois <- createDHARMa(simulatedResponse = ppc_pois,    
                                observedResponse = abund_utm$counts,        
-                               fittedPredictedResponse = apply(samples$pois, 1, median), 
+                               fittedPredictedResponse = apply(samples$pois, 1, median), # or mean
                                integerResponse = TRUE)
 
-# Figure A1
-jpeg(file = "figures/fig_A1_ppc_pois.jpeg", width = 800, height = 400)
+# Figure A2
+jpeg(file = "figures/fig_A2_fused_pois.jpeg", width = 800, height = 400)
 par(mfrow = c(1,2))
 plotQQunif(res_dharm_pois)    
 testDispersion(res_dharm_pois)
@@ -109,7 +109,7 @@ testSpatialAutocorrelation(res_dharm_pois,
                            y = st_coordinates(abund_utm)[,"Y"], 
                            plot = FALSE)
 
-#--- b) Check the Negative binomial model 
+#--- b) Check the negative binomial family with replicated data
 set.seed(234)
 ppc_nb <- simulate_replicates(samples$nb, family = "nbinomial", 
                               jfit_nb$summary.hyperpar[1,"mean"]
@@ -117,11 +117,11 @@ ppc_nb <- simulate_replicates(samples$nb, family = "nbinomial",
 
 res_dharm_nb <- createDHARMa(simulatedResponse = ppc_nb, 
                              observedResponse = abund_utm$counts,    
-                             fittedPredictedResponse = apply(samples$nb, 1, median),  
+                             fittedPredictedResponse = apply(samples$nb, 1, median), # or mean 
                              integerResponse = TRUE)
 
-# Figure A2
-jpeg(file = "figures/fig_A2_ppc_nbin.jpeg", width = 800, height = 400)
+# Residual plots for the NB likelihood
+jpeg(file = "figures/fig_shared_nbin.jpeg", width = 800, height = 400)
 par(mfrow = c(1,2))
 plotQQunif(res_dharm_nb)    
 testDispersion(res_dharm_nb)

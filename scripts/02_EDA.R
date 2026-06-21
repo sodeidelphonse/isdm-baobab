@@ -13,6 +13,10 @@ library(ggspatial)
 library(INLA)
 library(inlabru)
 library(isdmtools)  # Install the version v0.4.0 from the binary/source files or from GitHub
+library(MASS)
+library(spaMM)
+library(DHARMa)
+
 source("scripts/08_utils.r")
 
 #--------------------------------
@@ -183,7 +187,7 @@ rm(plot_v, plot_k, plot_vk)
 #--- A) Bayesian LGCP -----
 bru_options_set(control.compute = list(dic = TRUE, config = TRUE)) 
 
-#--- Initial mesh configuration 
+#--- Some initial mesh configurations
 bndr <- fm_as_segm(ben_utm)
 
 mesh2d <- fm_mesh_2d(
@@ -256,7 +260,7 @@ fit_lgcp_spde0$dic$dic - fit_lgcp_spde$dic$dic
 #--- Credible intervals for Bayesian LGCP covariance parameters ------
 fit_lgcp_spde$summary.hyperpar
 
-# StDev and Variance (checked)
+# StDev and variance of spatial signal (checked)
 marg_sd <- fit_lgcp_spde$marginals.hyperpar$`Stdev for spde`
 inla.qmarginal(c(0.025, 0.5, 0.975), marg_sd)   
 
@@ -296,7 +300,7 @@ summary(cor_freq$pair_cor_sc)
 cor_bayes <- std_matern_corr(fit_lgcp_spde, "inla", r = dist_vals) 
 summary(cor_bayes$pair_cor_sc)
 
-# 3.) Compute the normalized empirical inhomogenous K-function 
+# 3.) Compute the normalized empirical inhomogeneous K-function 
 Ki <- Kinhom(pp,  r = dist_vals)  
 Ki$iso_sc  <- (Ki$iso - min(Ki$theo, na.rm = T))/diff(range(Ki$theo, na.rm =T))
 Ki$theo_sc <- (Ki$theo - min(Ki$theo, na.rm = T))/diff(range(Ki$theo, na.rm =T))
@@ -337,7 +341,7 @@ ggsave("figures/fig5_pair_corr.jpeg", plot_cor, width = 4.5, height = 4, dpi = 2
 #--- 5) Bootstrapping for estimating confidence intervals 
 #-----------------------------------------------------------------
 
-# The outputs from the analyses in this section have served to fill in the Table 2, 
+# The outputs from the analyses performed here have served to fill in the Table 2, 
 # specifically the confidence intervals of classic/frequentist approaches.
 
 #--- A) Simulation of covariance parameters for the variogram model
@@ -356,7 +360,7 @@ est_sigmasq <- v_mat$cov.pars[1]
 est_phi <- v_mat$cov.pars[2]
 est_tausq <- 0  
 
-## Step 1: Generate 1,000 spatial simulations based on the variogram model
+## Step 1: Generate 1000 spatial simulations based on the variogram model
 set.seed(231)
 nsim <- 1000
 sim_grf <- grf(nrow(dt$coords), grid = dt$coords, nsim = nsim, 
@@ -406,7 +410,7 @@ quantile(sim_geor[, "phi"], probs = c(0.025, 0.975))
 # 95% CI for kappa (1/phi)
 quantile(1/sim_geor[, "phi"], probs = c(0.025, 0.975))
 
-# 95% CI for the range: rho = phi*sqrt(8)
+# 95% CI for the spatial range: rho = phi*sqrt(8)
 quantile(sim_geor[, "phi"]*sqrt(8), probs = c(0.025, 0.975))
 
 # The 10% Practical range 
@@ -414,8 +418,7 @@ solve_practical_range(param_val = est_phi, nu = 1, thresh = 0.1, engine = "geor"
 
 # The 10% practical range for replicated data
 prac_vec_geor <- sapply(sim_geor[,"phi"], function(p) {
-  solve_practical_range(param_val = p, nu = 1, thresh = 0.1, 
-                        engine = "geor")
+  solve_practical_range(param_val = p, nu = 1, thresh = 0.1, engine = "geor")
 })
 
 # 95% CI estimates
@@ -467,7 +470,7 @@ quantile(sim_lgcp[, "alpha"], probs = c(0.025, 0.975))
 # 95% CI for kappa
 quantile(sqrt(8)/(sim_lgcp[, "alpha"] * 2), probs = c(0.025, 0.975))
 
-# 95% CI for the range: 2*alpha 
+# 95% CI for the spatial range: 2*alpha 
 quantile(sim_lgcp[, "alpha"] * 2, probs = c(0.025, 0.975))
 
 # 95% CI for the 10% practical range 
@@ -487,10 +490,6 @@ solve_practical_range(param_val = fit_lgcp_spat$par["alpha"],
 #-------------------------------------------------------
 #--- 6) Exploratory modelling for the abundance data
 #-------------------------------------------------------
-
-library(MASS)
-library(spaMM)
-library(DHARMa)
 
 #--- A) Non-spatial models -----
 
@@ -534,11 +533,12 @@ AIC(glm_nb)
 BIC(glm_c)
 BIC(glm_nb)
 
-# The negative binomial seems to correct the dispersion present in the data but shows a 
-# higher AIC and BIC values, likely due to additional model parameters. Let's see what happen
-# when we account for the unexplained spatial variation as demonstrated by the variogram.
+# The negative binomial family seems to correct the dispersion present in the data.  
+# However, it shows a higher AIC and BIC values, likely due to additional model parameters. 
+# Let's see what happen when we account for the unexplained spatial variation as 
+# demonstrated by the variogram.
 
-#--- B) Spatial GLMM with Martern covariance -------
+#--- B) Spatial GLMM with Matérn covariance -------
 
 # a) Poisson model with Matern covariance
 spamm_pois <- fitme(counts ~ bio1_wc30s +bio14_wc30s +srtm_slope +SLTPPT_d2 +CLYPPT_d6 + 
@@ -561,7 +561,14 @@ set.seed(1234)
 res_spamm <- simulateResiduals(spamm_pois, n = 1000) 
 testResiduals(res_spamm)
 
-# b) Negative binomial model with Martern covariance
+# Figure A1
+jpeg(file = "figures/fig_A1_spam_pois.jpeg", width = 800, height = 400)
+par(mfrow = c(1,2))
+plotQQunif(res_spamm)    
+testDispersion(res_spamm)
+dev.off()
+
+# b) Negative binomial model with Matérn covariance
 spamm_nb <- fitme(counts ~ bio1_wc30s +bio14_wc30s +srtm_slope +SLTPPT_d2 +CLYPPT_d6 + 
                     offset(log(area)) + Matern(1 | X + Y),
                   data = data_abund, 
@@ -582,7 +589,7 @@ set.seed(1234)
 res_spamm_nb <- simulateResiduals(spamm_nb, n = 1000)
 testResiduals(res_spamm_nb, plot=T)
 
-# CONCLUSION: The two spatial models fit well the observed abundance. 
+# CONCLUSION: The two spatial models fit the observed abundance well. 
 # However, we prefer the parsimonious model (i.e. the Poisson likelihood) for
 # the Bayesian data integration framework
 AIC(spamm_pois)
