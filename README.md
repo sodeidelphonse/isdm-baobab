@@ -11,7 +11,6 @@ Sode, A.I., Fandohan, A.B., Krainski, E.T., Assogbadjo, A.E., & Glèlè Kakaï, 
 * [Quick Start](#quick-start)
 * [Requirements](#requirements)
 * [Repository Structure](#repository-structure)
-* [Environment Configuration](#environment-configuration)
 * [Pipeline Logic](#pipeline-logic)
 * [Spatial Data Notes](#spatial-data-notes)
 * [Exploratory Analysis Outputs](#exploratory-analysis-outputs)
@@ -24,8 +23,14 @@ The study utilises a Bayesian spatial fusion framework with `inlabru` and `isdmt
 The aim is to comprehend and map the spatial variation of this multipurpose agroforestry tree species across the three climatic zones of Benin (West Africa).
 
 ## 🚀 Quick Start
-1. Open the `.Rproj` file.
-2. Run `renv::restore()`.
+1. Launch the `.Rproj` file in RStudio.
+2. Run the following lines in the R console to automatically install all required library versions:
+
+```R
+if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+if (!file.exists("renv/activate.R")) renv::init(bare = TRUE)
+renv::restore()
+```
 3. Run `scripts/01_preprocessing.R`.
 4. Follow scripts 02–07 in order.
 
@@ -52,7 +57,7 @@ remotes::install_github("sodeidelphonse/isdmtools@v0.4.0")
 
 * **scripts/**:
     * `01_preprocessing.R`: Import and clean datasets and generate mesh configurations.
-    * `02_EDA.R`: Perform exploratory analysis, particularly spatial dependence assessment, hypothesis testing, and data visualisation.
+    * `02_EDA.R`: Perform exploratory analysis, particularly spatial dependence assessment, and data visualisation.
     * `03_evaluation_pipeline.R`: Set up the ISDM pipeline from spatial blocking, fitting, prediction to evaluation.
     * `04_run_blockCV.R`: Run the block cross-validation strategy for the integrated modelling workflow.
     * `05_model_fitting.R`: Run the INLA-SPDE integrated modelling workflow for the selected model using the full datasets.
@@ -67,13 +72,6 @@ remotes::install_github("sodeidelphonse/isdmtools@v0.4.0")
 * **software/**: The archive of the `isdmtools` package used for preparing the manuscript. Both binary and source codes are provided.
 
 * `README.md`: The project documentation (this page).
-
-## 📦 Environment Configuration
-To reproduce the environment used for the analysis:
-
-* Make sure you have the `renv` package installed by running `install.packages("renv")`. 
-
-* With the project root as your working directory, run `renv::restore()` to automatically download and install all required library versions.
 
 ## ⚙️ Pipeline Logic
 This analysis is designed as a sequential pipeline (01–07). Each stage relies on the outputs of the preceding stages and the shared utility functions:
@@ -95,7 +93,7 @@ This analysis is designed as a sequential pipeline (01–07). Each stage relies 
 
 * Due to serialisation constraints common with high-resolution rasters and complex spatial model outputs (e.g., `terra` and `INLA` objects), we recommend the following approach for full reproducibility:
 
-  * Re-running Pre-processing: It is strongly recommended that you re-run `01_preprocessing.R` step, particularly after restarting your R session. 
+  * Re-running Pre-processing: You may need to re-run `01_preprocessing.R` step, particularly after restarting your R session. 
   This ensures that the environmental covariates are correctly loaded into your local R memory for subsequent stages.
 
   * Raw Data Access: The original environmental layers are provided in `data/covariates/` to demonstrate the transition from raw geospatial data to the analysis-ready stacks.
