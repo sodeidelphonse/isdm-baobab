@@ -377,7 +377,7 @@ if (file.exists("results/simulations_variofit.csv")) {
   message("Loading pre-calculated replicates from outputs folder...")
   sim_geor <- read.csv("results/simulations_variofit.csv") |> as.matrix() 
 } else {
-  message("No pre-calculated files found. Starting 1,000 simulations (this may take ~1 hour)...")
+  message("No pre-calculated files found. Starting 1000 simulations (this may take ~1 hour)...")
   sim_geor <- matrix(NA, nrow = nsim, ncol = 2)  
   colnames(sim_geor) <- c("sigmasq", "phi")
 
@@ -445,7 +445,7 @@ if (file.exists("results/simulations_lgcp.csv")) {
   message("Loading pre-calculated replicates from outputs folder...")
   sim_lgcp <- read.csv("results/simulations_lgcp.csv") |> as.matrix() 
 } else {
-  message("No pre-calculated files found. Starting 1,000 simulations (this may take > 1 hour)...")
+  message("No pre-calculated files found. Starting 1000 simulations (this may take > 1 hour)...")
   sim_lgcp <- matrix(NA, nrow = nsim, ncol = 2) 
   colnames(sim_lgcp) <- c("sigma_sq", "alpha")
   
@@ -562,7 +562,7 @@ res_spamm <- simulateResiduals(spamm_pois, n = 1000)
 testResiduals(res_spamm)
 
 # Figure A1
-jpeg(file = "figures/fig_A1_spam_pois.jpeg", width = 800, height = 400)
+jpeg(file = "figures/fig_A1_resid_spam_pois.jpeg", width = 800, height = 400)
 par(mfrow = c(1,2))
 plotQQunif(res_spamm)    
 testDispersion(res_spamm)
@@ -587,7 +587,7 @@ spamm_nb0 <- update(spamm_nb, . ~ offset(log(area)))
 # Residuals diagnostics
 set.seed(1234)
 res_spamm_nb <- simulateResiduals(spamm_nb, n = 1000)
-testResiduals(res_spamm_nb, plot=T)
+testResiduals(res_spamm_nb, plot=TRUE)
 
 # CONCLUSION: The two spatial models fit the observed abundance well. 
 # However, we prefer the parsimonious model (i.e. the Poisson likelihood) for

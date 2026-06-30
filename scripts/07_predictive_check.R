@@ -97,7 +97,7 @@ res_dharm_pois <- createDHARMa(simulatedResponse = ppc_pois,
                                integerResponse = TRUE)
 
 # Figure A2
-jpeg(file = "figures/fig_A2_fused_pois.jpeg", width = 800, height = 400)
+jpeg(file = "figures/fig_A2_resid_shared_pois.jpeg", width = 800, height = 400)
 par(mfrow = c(1,2))
 plotQQunif(res_dharm_pois)    
 testDispersion(res_dharm_pois)
@@ -121,11 +121,9 @@ res_dharm_nb <- createDHARMa(simulatedResponse = ppc_nb,
                              integerResponse = TRUE)
 
 # Residual plots for the NB likelihood
-jpeg(file = "figures/fig_shared_nbin.jpeg", width = 800, height = 400)
 par(mfrow = c(1,2))
 plotQQunif(res_dharm_nb)    
 testDispersion(res_dharm_nb)
-dev.off()
 
 # Spatial autocorrelation remains in the residuals
 testSpatialAutocorrelation(res_dharm_nb, 
