@@ -19,8 +19,8 @@ Sode, A.I., Fandohan, A.B., Krainski, E.T., Assogbadjo, A.E., & Glèlè Kakaï, 
 * [Contact & Support](#contact-support)
 
 ## 📝 Overview 
-The study utilises a Bayesian spatial fusion framework with `inlabru` and `isdmtools` to integrate presence-only (GBIF and field records) and structured abundance data of the African baobab. 
-The aim is to comprehend and map the spatial variation of this multipurpose agroforestry tree species across the three climatic zones of Benin (West Africa).
+The study implements a Bayesian spatial fusion framework with `inlabru` and `isdmtools` to integrate presence-only records (GBIF and field) and structured abundance data of the African baobab. 
+The aim is to understand and map the spatial variation of this multipurpose agroforestry tree species across the three climatic zones of Benin (West Africa).
 
 ## 🚀 Quick Start
 1. Launch the `.Rproj` file in RStudio.
@@ -38,7 +38,7 @@ renv::restore()
 * **Language:** R (v4.4.1)
 * **Key Packages:** `isdmtools`, `inlabru`, `PointedSDMs`, `INLA`, `sf`, and `terra`. See the scripts for other required packages. 
 * **Environment:** `renv.lock` file is provided to restore the exact library versions used in this analysis.
-* **`isdmtools`:** which is not yet available on CRAN can be installed as follows:
+* **`isdmtools`:** which is not yet available on CRAN, can be installed as follows:
 
 ```R
 install.packages("remotes") 
@@ -62,7 +62,7 @@ remotes::install_github("sodeidelphonse/isdmtools@v0.4.0")
     * `04_run_blockCV.R`: Run the block cross-validation strategy for the integrated modelling workflow.
     * `05_model_fitting.R`: Run the INLA-SPDE integrated modelling workflow for the selected model using the full datasets.
     * `06_prediction.R`: Predict the intensity surface from the fitted model and compute relevant target quantities.
-    * `07_predictive_check.R`: Perform posterior predictive check (PPC) from the integrated models.
+    * `07_predictive_check.R`: Perform posterior predictive check (PPC) to validate the model predictions.
     * `08_utils.R`: Utility functions used in other scripts during the analysis.
     
 * **figures/**: The figures generated from the analysis using the raw datasets. 
@@ -79,26 +79,26 @@ This analysis is designed as a sequential pipeline (01–07). Each stage relies 
 * **Sequential Flow**: To reproduce the full results, it is recommended to run the scripts in numerical order.
 
 * **Cross-Stage Dependencies**:
-    * Exploratory Data Analysis (Stage 02): Utilises processed data from stage 01 to perform the initial variogram and spatial point pattern analyses as well as data visualisation. 
+    * Exploratory Data Analysis (Stage 02): Utilises processed data from stage 01 to perform the initial variogram and spatial point pattern analyses. 
     
     * Integrated Model Evaluation (Stage 04): Utilises processed data from 01 and the evaluation pipeline sourced from 03.
     
     * Modelling (Stage 05): Requires the environmental covariates' stack, datasets and mesh objects prepared in 01.
 
-    * Prediction (Stage 06): Requires the fitted model objects from 05 and the prediction locations to be imported.
+    * Prediction (Stage 06): Requires the fitted model objects from 05 and the prediction grids.
     
     * Validation(Stage 07): Utilises processed data from 01 to rerun models with `inlabru` and perform residual diagnostics.
     
 ## 💾 Spatial Data Notes
 
-* Due to serialisation constraints common with high-resolution rasters and complex spatial model outputs (e.g., `terra` and `INLA` objects), we recommend the following approach for full reproducibility:
+* Due to serialisation constraints common with high-resolution raster layers and complex spatial model outputs (e.g., `terra` and `INLA` objects), we recommend the following approach for full reproducibility:
 
-  * Re-running Pre-processing: You may need to re-run `01_preprocessing.R` step, particularly after restarting your R session. 
-  This ensures that the environmental covariates are correctly loaded into your local R memory for subsequent stages.
+  * Re-running Pre-processing: You may need to re-run the raster processing at step 01, particularly after restarting your R session. 
+  This ensures that raster layers are correctly loaded into your local R memory for subsequent stages.
 
   * Raw Data Access: The original environmental layers are provided in `data/covariates/` to demonstrate the transition from raw geospatial data to the analysis-ready stacks.
 
-  * Serialised Alternative: Pre-processed covariates are available as `covariates_pc.rds`. If using it, ensure that object names are mapped according to the naming conventions established in all scripts.
+  * Serialised Alternative: Pre-processed covariates are available as `covariates_pc.rds`. If using it, ensure that object names are mapped according to the established naming conventions.
 
 * To facilitate public distribution and ensure the privacy of surveyed settlements is protected, the datasets provided in the `data/` folder have been de-identified using a 1-km jitter. 
 While this does not significantly alter the scale of the predictions, users may notice minor variations if they re-run the distance and plotting scripts.
@@ -123,14 +123,14 @@ This repository is released under the [MIT License](LICENSE).
 If you use this repository, the underlying data, or the specific analysis pipeline in your research, please cite them as follows:
 
 - **The Core Methodology & Application Paper**: 
-Our foundational study on the African baobab datasets in Benin is accepted for publication in *Environmental and Ecological Statistics*:
+Our foundational study on the African baobab datasets in Benin has been published in *Environmental and Ecological Statistics*:
 
   Sode, A.I., Fandohan, A.B., Krainski, E.T., Assogbadjo, A.E., & Glèlè Kakaï, R. (2026). Integrating presence-only and abundance data to predict baobab (*Adansonia digitata* L.) distribution: a Bayesian data fusion framework. *Environmental and Ecological Statistics*. https://doi.org/10.1007/s10651-026-00737-2
 
 - **The Project Archive**: 
 The complete reproducible archive for this study—including the 1-km jittered datasets, repository export, `isdmtools v0.4.0` source code, pre-computed outputs, and figures—is permanently archived on Zenodo:
 
-  Sode, A.I., Fandohan, A.B., Krainski, E.T., Assogbadjo, A.E., & Glèlè Kakaï, R. (2026). Research compendium for integrating and predicting baobab (*Adansonia digitata* L.) distribution in Benin using a Bayesian data fusion framework: Data, pipelines, and isdmtools v0.4.0 source code (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.19227943
+  Sode, A.I., Fandohan, A.B., Krainski, E.T., Assogbadjo, A.E., & Glèlè Kakaï, R. (2026). Research compendium for integrating and predicting baobab (*Adansonia digitata* L.) distribution in Benin using a Bayesian data fusion framework: Data, pipelines, and isdmtools v0.4.0 source code (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.20786821
 
 - **The `isdmtools` R Package**: 
 The underlying computational infrastructure used for multisource spatial data resampling and ISDM evaluation is part of the `isdmtools` R package. A dedicated software manuscript is currently in preparation. To cite the package software itself with its latest version, please use:
