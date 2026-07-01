@@ -27,6 +27,7 @@
 #' @param has_offset logical. Indicates if the count dataset includes an offset variable.
 #' @param int.strategy character. Indicates the integration strategy to use by the INLA engine
 #' Defaulted to empirical Bayes ("eb")
+#' @param n.samples integer. The number of posterior samples
 #' @param diagonal numeric. A value added to the diagonal elements to stabilize the precision matrix
 #' @param seed integer. The seed generator for the reproducibility of the background sample
 #' @param verbose logical. Indicates if the details on each model fitting will be shown in the R session
@@ -36,7 +37,7 @@ evaluate_model <- function(fold, model_name, response_type = c("joint.po", "coun
                            mesh, proj, boundary, xy_excluded, cov_path, bias_names, metrics = NULL, 
                            roc_composite = NULL,  prior.sigma = c(0.1, 0.01), prior.range = c(10, 0.01),  
                            Offset = 'area', responseCounts = 'counts', has_offset = TRUE, int.strategy ='eb',  
-                           diagonal = 0.1, seed = 23, verbose = FALSE, ...) {  
+                           n.samples = 1000L, diagonal = 0.1, seed = 23, verbose = FALSE, ...) {  
   
   response_type <- match.arg(response_type)
   
@@ -125,7 +126,7 @@ evaluate_model <- function(fold, model_name, response_type = c("joint.po", "coun
   # Predictions
   predictions <- tryCatch({
     predict(spat_fit, data = fm_pix, predictor = TRUE, fun = "linear", 
-                           n.samples = 500, seed = seed_predict)
+                           n.samples = n.samples, seed = seed_predict)
   }, error = function(e) {
     return(structure(list(error_stage = "predict", message = e$message),
                      class = "model_error"))
@@ -145,7 +146,7 @@ evaluate_model <- function(fold, model_name, response_type = c("joint.po", "coun
     predictions_count <- tryCatch({
       predict(spat_fit, data = fm_pix, fun = "linear", spatial = TRUE, intercepts = TRUE, 
               datasets = "Count", covariates = names(covariates_pc), 
-              n.samples = 500, seed = seed_predict)
+              n.samples = n.samples, seed = seed_predict)
     }, error = function(e) {
       return(structure(list(error_stage = "predict", message = e$message), class = "model_error"))
     })
