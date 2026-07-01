@@ -101,7 +101,7 @@ This analysis is designed as a sequential pipeline (01–07). Each stage relies 
   * Serialised Alternative: Pre-processed covariates are available as `covariates_pc.rds`. If using it, ensure that object names are mapped according to the established naming conventions.
 
 * To facilitate public distribution and ensure the privacy of surveyed settlements is protected, the datasets provided in the `data/` folder have been de-identified using a 1-km jitter. 
-While this does not significantly alter the scale of the predictions, users may notice minor variations if they re-run the distance and plotting scripts.
+While this does not significantly alter the scale of the predictions, users may notice minor variations if they re-run the analysis.
 
 ## 📊 Exploratory Analysis Outputs
 
@@ -130,7 +130,7 @@ Our foundational study on the African baobab datasets in Benin has been publishe
 - **The Project Archive**: 
 The complete reproducible archive for this study—including the 1-km jittered datasets, repository export, `isdmtools v0.4.0` source code, pre-computed outputs, and figures—is permanently archived on Zenodo:
 
-  Sode, A.I., Fandohan, A.B., Krainski, E.T., Assogbadjo, A.E., & Glèlè Kakaï, R. (2026). Research compendium for integrating and predicting baobab (*Adansonia digitata* L.) distribution in Benin using a Bayesian data fusion framework: Data, pipelines, and isdmtools v0.4.0 source code (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.20786821
+  Sode, A.I., Fandohan, A.B., Krainski, E.T., Assogbadjo, A.E., & Glèlè Kakaï, R. (2026). Research compendium for integrating and predicting baobab (*Adansonia digitata* L.) distribution in Benin using a Bayesian data fusion framework: Data, pipelines, and isdmtools v0.4.0 source code (v1.1.0). Zenodo. https://doi.org/10.5281/zenodo.20786821
 
 - **The `isdmtools` R Package**: 
 The underlying computational infrastructure used for multisource spatial data resampling and ISDM evaluation is part of the `isdmtools` R package. A dedicated software manuscript is currently in preparation. To cite the package software itself with its latest version, please use:
