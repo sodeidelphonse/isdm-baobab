@@ -12,7 +12,6 @@ library(ggplot2)
 library(inlabru)
 library(PointedSDMs)
 library(isdmtools)
-
 library(dplyr)
 library(data.table)
 library(agricolae)
@@ -36,12 +35,11 @@ print(p_cv)
 ggsave("figures/fig5_block_cv.jpeg",  p_cv, width = 8, height = 6, dpi = 300)
 rm(datasets, p_cv)
 
-#--- Notes !!! ------------------
-# Prediction grids was created, and stored to disk for the prediction.
+# Create the prediction grids and store them to disk if needed.
 # saveRDS(fm_pixels(mesh, mask = ben_utm), "data/pred_points.RDS")
 fm_pix <- readRDS("data/pred_points.rds")
 
-# Cleaned rasters are also saved to disk to avoid serialization issues 
+# Cleaned covariates are also saved to disk to avoid serialization issues 
 cov_path <- "data/covariates_pc.rds"
 
 xy_obs <- rbind(st_coordinates(point_utm)[, c("X","Y")], 
@@ -72,7 +70,7 @@ system.time(
 res_df <- do.call(rbind, lapply(res_test, as.data.frame))
 print(res_df)
 
-#--- b) Run all jobs serially for ROC-based metrics
+#--- b) Run all jobs serially for both error- and ROC-based metrics
 system.time(
   res_roc  <- lapply(seq_len(nrow(grid)), function(i){  
     evaluate_model_logged(i, grid, "results", dataset, mesh, proj, boundary = ben_utm, 
@@ -91,7 +89,7 @@ system.time(
 res_roc_df <- compile_results ("results")
 write.csv(res_roc_df, "results/Evaluation_roc_final.csv", row.names = FALSE)
 
-#--- d) Error-based metrics for count model alone ----
+#--- d) Error-based metrics for count model alone (for a quick check) ----
 metrics_cont <- c("rmse", "mae")
 system.time(
      res_cont  <- lapply(which(grid$resp_type == "count"), function(i) {
@@ -103,17 +101,6 @@ system.time(
 
 res_count_df <- do.call(rbind, lapply(res_cont, as.data.frame))
 write.csv(res_count_df, "result_cont/Evaluation_cont_final.csv", row.names = FALSE)
-
-#--- f) Error-based metrics for the shared model ----
-system.time(
-  res_jt <- lapply(which(grid$model == "shared"), function(i) {
-    evaluate_model_logged(i, grid, "result_cont_sh", dataset, mesh, proj, boundary = ben_utm, 
-                          xy_excluded = xy_obs, cov_path = cov_path, bias_names = "Presence", 
-                          metrics = metrics_cont, roc_composite = NULL) 
-  })
-)
-res_jt_df <- do.call(rbind, lapply(res_jt, as.data.frame))
-res_jt_df
 
 
 #-------------------------------------------
