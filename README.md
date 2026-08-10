@@ -74,21 +74,9 @@ remotes::install_github("sodeidelphonse/isdmtools@v0.4.0")
 * `README.md`: The project documentation (this page).
 
 ## ⚙️ Pipeline Logic
-This analysis is designed as a sequential pipeline (01–07). Each stage relies on the outputs of the preceding stages and the shared utility functions:
+This analysis is designed as a sequential pipeline (01–07). Each stage relies on the outputs of the preceding stages and the shared utility functions.
+To reproduce the full results, it is recommended to run the scripts in numerical order.
 
-* **Sequential Flow**: To reproduce the full results, it is recommended to run the scripts in numerical order.
-
-* **Cross-Stage Dependencies**:
-    * Exploratory Data Analysis (Stage 02): Utilises processed data from stage 01 to perform the initial variogram and spatial point pattern analyses. 
-    
-    * Integrated Model Evaluation (Stage 04): Utilises processed data from 01 and the evaluation pipeline sourced from 03.
-    
-    * Modelling (Stage 05): Requires the environmental covariates' stack, datasets and mesh objects prepared in 01.
-
-    * Prediction (Stage 06): Requires the fitted model objects from 05 and the prediction grids.
-    
-    * Validation(Stage 07): Utilises processed data from 01 to rerun models with `inlabru` and perform residual diagnostics.
-    
 ## 💾 Spatial Data Notes
 
 * Due to serialisation constraints common with high-resolution raster layers and complex spatial model outputs (e.g., `terra` and `INLA` objects), we recommend the following approach for full reproducibility:
