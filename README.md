@@ -45,6 +45,7 @@ install.packages("remotes")
 remotes::install_github("sodeidelphonse/isdmtools@v0.4.0")
 ```
 * **`INLA`:** This workflow requires the package [INLA](https://www.r-inla.org/download/index.html) `v24.06.27` in order to reproduce the outputs presented in the paper.
+Please find the source and binary archives of INLA [here](https://inla.r-inla-download.org/R/stable).
 
 ## 📂 Repository Structure
 * **data/**: 
