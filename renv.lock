@@ -3042,7 +3042,6 @@
       "Encoding": "UTF-8",
       "LazyData": "true",
       "Roxygen": "list(markdown = TRUE)",
-      "RoxygenNote": "7.3.3",
       "Depends": [
         "R (>= 4.4.0)"
       ],
@@ -3068,12 +3067,13 @@
       ],
       "Config/testthat/edition": "3",
       "VignetteBuilder": "knitr",
+      "Config/roxygen2/version": "8.1.0",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "isdmtools",
       "RemoteUsername": "sodeidelphonse",
       "RemoteRef": "v0.4.0",
-      "RemoteSha": "8ba5b358b984121499a18933c682d2c09c31f3bc",
+      "RemoteSha": "5dcc9254bf40467f3313eda8f6d9e0e9deb8eea0",
       "NeedsCompilation": "no",
       "Author": "Akoeugnigan Idelphonse SODE [aut, cre] (<https://orcid.org/0000-0002-8556-239X>, SODE A. Idelphonse - continued development of the main code), Adandé Belarmain Fandohan [ctb], Elias Teixeira Krainski [ctb], Romain Glèlè Kakaï [ctb]"
     },
