@@ -119,7 +119,7 @@ Our foundational study on the African baobab datasets in Benin has been publishe
 - **The Project Archive**: 
 The complete reproducible archive for this study—including the 1-km jittered datasets, repository export, `isdmtools v0.4.0` source code, pre-computed outputs, and figures—is permanently archived on Zenodo:
 
-  Sode, A.I., Fandohan, A.B., Krainski, E.T., Assogbadjo, A.E., & Glèlè Kakaï, R. (2026). Research compendium for integrating and predicting baobab (*Adansonia digitata* L.) distribution in Benin using a Bayesian data fusion framework: Data, pipelines, and isdmtools v0.4.0 source code (v1.1.0). Zenodo. https://doi.org/10.5281/zenodo.20786821
+  Sode, A.I., Fandohan, A.B., Krainski, E.T., Assogbadjo, A.E., & Glèlè Kakaï, R. (2026). Research compendium for integrating and predicting baobab (*Adansonia digitata* L.) distribution in Benin using a Bayesian data fusion framework: Data, pipelines, and isdmtools v0.4.0 source code (v1.2.0). Zenodo. https://doi.org/10.5281/zenodo.21873076
 
 - **The `isdmtools` R Package**: 
 The underlying computational infrastructure used for multisource spatial data resampling and ISDM evaluation is part of the `isdmtools` R package. A dedicated software manuscript is currently in preparation. To cite the package software itself with its latest version, please use:
