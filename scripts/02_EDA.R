@@ -187,7 +187,17 @@ rm(plot_v, plot_k, plot_vk)
 #--- A) Bayesian LGCP -----
 bru_options_set(control.compute = list(dic = TRUE, config = TRUE)) 
 
-#--- Some initial mesh configurations
+#--- Some initial mesh configurations for sensitivity check
+# Search the optimal mesh parameters based on the Belmont (2022) tutorial 
+xrange <- diff(range(st_coordinates(point_utm)[,"X"]))
+yrange <- diff(range(st_coordinates(point_utm)[,"Y"]))
+
+(max_edge <- min(xrange, yrange)/(3*5))
+(bnd_outer <- min(xrange, yrange)/3)  # offset (domain extension)
+ceiling(max_edge)*c(1, 3)  # max.edge (the outer layer has lower triangles density)
+ceiling(max_edge)*1/2      # cutoff (avoid too many triangles around clustered points)
+
+# Build the mesh with the selected configurations
 bndr <- fm_as_segm(ben_utm)
 
 mesh2d <- fm_mesh_2d(
@@ -202,7 +212,7 @@ mesh2d$n
 # The Matern model for spatial latent 
 pcmatern0 <- inla.spde2.pcmatern(mesh2d, 
                                 prior.range = c(10, 0.01), 
-                                prior.sigma = c(0.1, 0.01)  # tried sigma_0 = 0.3, 0.5, 1  
+                                prior.sigma = c(0.1, 0.01)  # tested: sigma_0 = 0.3, 0.5, 1  
                                )
 
 # Model components and observation model
@@ -342,7 +352,7 @@ ggsave("figures/fig5_pair_corr.jpeg", plot_cor, width = 4.5, height = 4, dpi = 2
 #-----------------------------------------------------------------
 
 # The outputs from the analyses performed here have served to fill in the Table 2, 
-# specifically the confidence intervals of classic/frequentist approaches.
+# specifically the confidence intervals of the frequentist approaches.
 
 #--- A) Simulation of covariance parameters for the variogram model
 
@@ -368,7 +378,6 @@ sim_grf <- grf(nrow(dt$coords), grid = dt$coords, nsim = nsim,
                cov.pars = c(est_sigmasq, est_phi), 
                nugget = est_tausq, 
                lambda = 0.5)  # the same Box-Cox transformation 
-
 
 ## Step 2: Re-estimate covariance parameters for each simulation
 
@@ -475,10 +484,8 @@ quantile(sim_lgcp[, "alpha"] * 2, probs = c(0.025, 0.975))
 
 # 95% CI for the 10% practical range 
 prac_vec_spat <- sapply(sim_lgcp[, "alpha"], function(p) {
-  solve_practical_range(param_val = p,  nu = 1, thresh = 0.1, 
-                        engine = "spatstat")
+  solve_practical_range(param_val = p,  nu = 1, thresh = 0.1, engine = "spatstat")
 })
-
 quantile(prac_vec_spat, probs = c(0.025, 0.975))
 
 # The 10% practical range estimate
@@ -505,7 +512,7 @@ glm_c$deviance/glm_c$df.residual
 # Deviance explained
 (glm_c$null.deviance - glm_c$deviance)/glm_c$null.deviance
 
-# Simulation-based test (greater => overdispersion)
+# Residuals diagnostics (greater => overdispersion)
 res_sims_pois <- simulateResiduals(glm_c)
 plot(res_sims_pois)
 testDispersion(res_sims_pois, alternative = "greater") 
@@ -522,7 +529,7 @@ glm_nb$deviance/glm_nb$df.residual
 # Deviance explained
 (glm_nb$null.deviance - glm_nb$deviance)/glm_nb$null.deviance
 
-# Simulation-based test
+# Residuals diagnostics
 res_sims_nb <- simulateResiduals(glm_nb)
 plot(res_sims_nb)
 testDispersion(res_sims_nb, alternative = "greater")

@@ -89,48 +89,6 @@ covariates <- c(covariates_pc, covariates_pc)
 names(covariates) <- c(vars_pc, vars_pp)
 rm(r_files, r_tmp)
 
-#--- Build the mesh for the 2D SPDE -----
-
-# Search the optimal mesh parameters based on the Belmont (2022) tutorial 
-xrange <- diff(range(st_coordinates(point_utm)[,"X"]))
-yrange <- diff(range(st_coordinates(point_utm)[,"Y"]))
-
-(max_edge <- min(xrange, yrange)/(3*5))
-(bnd_outer <- min(xrange, yrange)/3)  # offset (domain extension)
-ceiling(max_edge)*c(1, 3)  # max.edge (the outer layer has lower triangles density)
-ceiling(max_edge)*1/2      # cutoff (avoid too many triangles around clustered points)
-
-# The final mesh validated for model fitting (see script 02)
-bndr <- fm_as_segm(ben_utm)
-mesh <- fm_mesh_2d(
-  boundary = bndr,
-  max.edge = c(22, 64),   # alternative tested: max.edge = c(20, 60), c(20, 40) 
-  offset = c(1e-3, 100),  # The 1e-3 has no effect on the triangles density
-  cutoff = 10,            # alternative tested: cutoff = ceiling(max_edge/5)
-  crs = proj
-)
-mesh$n
-
-# Figure A3
-png(file = "figures/fig_A3_mesh.jpeg", width = 500, height = 800)
-plot(mesh)
-dev.off()
-
-#--- 1D SPDE for nonlinear component ----
-x_bio14 <- seq(-1, 6, length = 15)     
-mesh1D  <- fm_mesh_1d(x_bio14, boundary = "free", degree = 2) 
-spde_bio14 <- inla.spde2.pcmatern(mesh = mesh1D,
-                                  alpha = 2,
-                                  constr = TRUE,
-                                  prior.range = c(1, 0.01),
-                                  prior.sigma = c(1, 0.01)
-                                 )
-
-# Figure A4 
-p_m1 <- ggplot() + geom_fm(data = mesh1D)
-ggsave("figures/fig_A4_mesh_bio14.jpeg",  p_m1, width = 5, height = 4, dpi = 300)
-rm(p_m1)
-
 #--- Figure A5 (map of selected covariates)
 covar_final <- covariates_pc
 names(covar_final) <- c("Annual temperature", "Rainfall of driest month", "SRTM slope", 
@@ -156,6 +114,39 @@ p_cor <- data_abund |>
                   lower = list(continuous ='cor')
           )
 
-# Figure 2 (correlation plot)
+# Figure 2 
 ggsave("figures/fig2_covar_corr.jpeg",  p_cor, width = 7, height = 6, dpi = 300)
 rm(p_cor)
+
+#--- Build the mesh for the 2D SPDE -----
+
+# The final mesh used for model fitting (see sensitivity check in script 02)
+bndr <- fm_as_segm(ben_utm)
+mesh <- fm_mesh_2d(
+  boundary = bndr,
+  max.edge = c(22, 64),   
+  offset = c(1e-3, 100),  
+  cutoff = 10,            
+  crs = proj
+)
+mesh$n
+
+# Figure A3
+png(file = "figures/fig_A3_mesh.jpeg", width = 500, height = 800)
+plot(mesh)
+dev.off()
+
+#--- 1D SPDE for the nonlinear component ----
+x_bio14 <- seq(-1, 6, length = 15)     
+mesh1D  <- fm_mesh_1d(x_bio14, boundary = "free", degree = 2) 
+spde_bio14 <- inla.spde2.pcmatern(mesh = mesh1D,
+                                  alpha = 2,
+                                  constr = TRUE,
+                                  prior.range = c(1, 0.01),
+                                  prior.sigma = c(1, 0.01)
+)
+
+# Figure A4 
+p_m1 <- ggplot() + geom_fm(data = mesh1D)
+ggsave("figures/fig_A4_mesh_bio14.jpeg",  p_m1, width = 5, height = 4, dpi = 300)
+rm(p_m1)
